@@ -6,7 +6,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.base.BaseActivity;
 
@@ -26,7 +25,6 @@ public class MainActivity extends BaseActivity {
 
     private void initToolBar() {
         toolbar= (Toolbar) findViewById(R.id.base_toolbar);
-        setSupportActionBar(toolbar);
         menuItemClickListener=new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {

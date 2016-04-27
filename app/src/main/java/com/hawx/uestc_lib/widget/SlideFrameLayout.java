@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AnimationSet;
 import android.widget.LinearLayout;
 import com.hawx.uestc_lib.base.BaseActivity;
 import com.hawx.uestc_lib.utils.Utils;
@@ -21,6 +20,7 @@ import com.hawx.uestc_lib.utils.Utils;
 public class SlideFrameLayout extends LinearLayout {
     private static int DEFAULT_INTERCEPT_DP =8;
     private static int DEFAULT_FINISH_DP=140;
+    private boolean isDrawerOpened=false;
     private int startX,currentX;
     private int interceptDp= DEFAULT_INTERCEPT_DP;
     private int finishDp= DEFAULT_FINISH_DP;
@@ -46,28 +46,34 @@ public class SlideFrameLayout extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()){
-            case MotionEvent.ACTION_DOWN:{
-                startX= (int) ev.getX();
-                intercepted=false;
-                break;
-            }
-            case MotionEvent.ACTION_MOVE:{
-                currentX= (int) ev.getX();
-                if (startX - currentX > Utils.dpTopx(context, interceptDp)) {
-                    intercepted = true;
+        if(!isDrawerOpened) {
+            switch (ev.getAction()) {
+                case MotionEvent.ACTION_DOWN: {
+                    Log.d("SlideFrameLayout", "onInterceptTouchEvent : ACTION_DOWN");
+                    startX = (int) ev.getX();
+                    intercepted = false;
+                    break;
                 }
-                break;
+                case MotionEvent.ACTION_MOVE: {
+                    Log.d("SlideFrameLayout", "onInterceptTouchEvent : ACTION_MOVE");
+                    currentX = (int) ev.getX();
+                    if (startX - currentX > Utils.dpTopx(context, interceptDp)) {
+                        intercepted = true;
+                    }
+                    break;
+                }
+                case MotionEvent.ACTION_UP: {
+                    intercepted = false;
+                    break;
+                }
+                default:
+                    intercepted = false;
+                    break;
             }
-            case MotionEvent.ACTION_UP:{
-                intercepted=false;
-                break;
-            }
-            default:
-                intercepted=false;
-                break;
+            return intercepted;
+        }else{
+            return super.onInterceptTouchEvent(ev);
         }
-        return intercepted;
     }
 
     @Override
@@ -136,27 +142,11 @@ public class SlideFrameLayout extends LinearLayout {
                 }
             }
             consum=true;
-        }else{
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:{
-                    consum=true;
-                    break;
-                }
-                case MotionEvent.ACTION_MOVE:{
-                    currentX= (int) event.getX();
-                    if (startX - currentX > Utils.dpTopx(context, interceptDp)) {
-                        intercepted = true;
-                    }
-                    consum=true;
-                    break;
-                }
-                default:
-                    consum=true;
-                    break;
-            }
-
         }
         return consum;
+    }
+    public void setDrawerOpened(boolean isDrawerOpened){
+        this.isDrawerOpened=isDrawerOpened;
     }
 
 }
