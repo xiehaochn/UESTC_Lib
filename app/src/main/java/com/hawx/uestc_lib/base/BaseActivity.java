@@ -2,7 +2,6 @@ package com.hawx.uestc_lib.base;
 
 
 
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -15,7 +14,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hawx.uestc_lib.R;
@@ -34,7 +32,6 @@ public class BaseActivity extends AppCompatActivity {
     private static ArrayList<BaseActivity> baseActivities=new ArrayList<BaseActivity>();
     private SlideFrameLayout slideFrameLayout;
     private View contentView;
-    private View toolBarView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

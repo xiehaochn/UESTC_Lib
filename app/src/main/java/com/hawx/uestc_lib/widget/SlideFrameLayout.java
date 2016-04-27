@@ -1,14 +1,15 @@
 package com.hawx.uestc_lib.widget;
 
 import android.animation.Animator;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationSet;
 import android.widget.LinearLayout;
-
 import com.hawx.uestc_lib.base.BaseActivity;
 import com.hawx.uestc_lib.utils.Utils;
 
@@ -19,7 +20,7 @@ import com.hawx.uestc_lib.utils.Utils;
  */
 public class SlideFrameLayout extends LinearLayout {
     private static int DEFAULT_INTERCEPT_DP =8;
-    private static int DEFAULT_FINISH_DP=200;
+    private static int DEFAULT_FINISH_DP=140;
     private int startX,currentX;
     private int interceptDp= DEFAULT_INTERCEPT_DP;
     private int finishDp= DEFAULT_FINISH_DP;
@@ -27,10 +28,12 @@ public class SlideFrameLayout extends LinearLayout {
     private boolean consum;
     private Context context;
     private BaseActivity baseActivity;
+    private AccelerateInterpolator accelerateInterpolator=new AccelerateInterpolator();
     public SlideFrameLayout(Context context, BaseActivity baseActivity) {
         super(context);
         this.context=context;
         this.baseActivity=baseActivity;
+
     }
 
     public SlideFrameLayout(Context context, AttributeSet attrs) {
@@ -43,25 +46,20 @@ public class SlideFrameLayout extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        Log.d("SlideFrameLayout","onInterceptTouchEvent");
         switch (ev.getAction()){
             case MotionEvent.ACTION_DOWN:{
-                Log.d("SlideFrameLayout","onInterceptTouchEvent:ACTION_DOWN");
                 startX= (int) ev.getX();
                 intercepted=false;
                 break;
             }
             case MotionEvent.ACTION_MOVE:{
-                Log.d("SlideFrameLayout", "onInterceptTouchEvent:ACTION_MOVE");
                 currentX= (int) ev.getX();
                 if (startX - currentX > Utils.dpTopx(context, interceptDp)) {
-                    Log.d("SlideFrameLayout", "Intercepted");
                     intercepted = true;
                 }
                 break;
             }
             case MotionEvent.ACTION_UP:{
-                Log.d("SlideFrameLayout","onInterceptTouchEvent:ACTION_UP");
                 intercepted=false;
                 break;
             }
@@ -69,30 +67,31 @@ public class SlideFrameLayout extends LinearLayout {
                 intercepted=false;
                 break;
         }
-        Log.d("SlideFrameLayout","onInterceptTouchEvent Result:"+intercepted);
         return intercepted;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d("SlideFrameLayout","onTouchEvent:"+event.getAction());
         if(intercepted) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_MOVE:{
                     currentX= (int) event.getX();
                     if(currentX-startX<0) {
-                        this.getChildAt(0).setTranslationX(currentX - startX);
+                        getChildAt(0).setTranslationX(currentX - startX);
+                        float alpha=(1.f-(startX-currentX)/ new Float(Utils.getWindowWidth(context)));
+                        getChildAt(0).setAlpha(alpha);
                     }
                     break;
                 }
                 case MotionEvent.ACTION_UP: {
-                    Log.d("SlideFrameLayout", "on touchEvent:finalX:" + currentX);
                     currentX=(int) event.getX();
+                    float currentTranslationX=getChildAt(0).getTranslationX();
+                    float currentAlpha=getChildAt(0).getAlpha();
                     intercepted = false;
                     if (startX - currentX >Utils.dpTopx(context, finishDp) ) {
-                        Log.d("SlideFrameLayout", "slideFinish Start");
-                        ObjectAnimator finishAnim = new ObjectAnimator().ofFloat(this.getChildAt(0), "translationX",currentX-startX,- Utils.getWindowWidth(context));
-                        finishAnim.addListener(new Animator.AnimatorListener() {
+                        AnimatorSet finishSet=new AnimatorSet();
+                        ObjectAnimator finishAnimTransX = new ObjectAnimator().ofFloat(getChildAt(0), "translationX",currentTranslationX,- Utils.getWindowWidth(context));
+                        finishAnimTransX.addListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
 
@@ -113,15 +112,24 @@ public class SlideFrameLayout extends LinearLayout {
 
                             }
                         });
-                        finishAnim.setInterpolator(new AccelerateInterpolator());
-                        finishAnim.setDuration(1000);
-                        finishAnim.start();
+                        finishAnimTransX.setInterpolator(accelerateInterpolator);
+                        finishAnimTransX.setDuration(500);
+                        ObjectAnimator finishAnimAlpha=new ObjectAnimator().ofFloat(getChildAt(0),"alpha",currentAlpha,0);
+                        finishAnimAlpha.setInterpolator(accelerateInterpolator);
+                        finishAnimAlpha.setDuration(500);
+                        finishSet.play(finishAnimTransX).with(finishAnimAlpha);
+                        finishSet.start();
                     }else{
-                        if(currentX-startX<0) {
-                            ObjectAnimator reset = new ObjectAnimator().ofFloat(this.getChildAt(0), "TranslationX", currentX - startX, 0);
-                            reset.setInterpolator(new AccelerateInterpolator());
-                            reset.setDuration(500);
-                            reset.start();
+                        if(currentTranslationX<0) {
+                            AnimatorSet resetSet=new AnimatorSet();
+                            ObjectAnimator resetAlpha=new ObjectAnimator().ofFloat(getChildAt(0),"alpha",currentAlpha,1);
+                            resetAlpha.setInterpolator(accelerateInterpolator);
+                            resetAlpha.setDuration(300);
+                            ObjectAnimator resetTranX = new ObjectAnimator().ofFloat(this.getChildAt(0), "TranslationX", currentTranslationX, 0);
+                            resetTranX.setInterpolator(accelerateInterpolator);
+                            resetTranX.setDuration(300);
+                            resetSet.play(resetTranX).with(resetAlpha);
+                            resetSet.start();
                         }
                     }
                     break;
