@@ -4,11 +4,15 @@ import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+
+import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.base.BaseActivity;
 import com.hawx.uestc_lib.utils.Utils;
 
@@ -17,7 +21,7 @@ import com.hawx.uestc_lib.utils.Utils;
  * @author Hawx
  * @version 1.0
  */
-public class SlideFrameLayout extends LinearLayout {
+public class SlideFrameLayout extends FrameLayout {
     private static int DEFAULT_INTERCEPT_DP =8;
     private static int DEFAULT_FINISH_DP=140;
     private boolean isDrawerOpened=false;
@@ -42,6 +46,25 @@ public class SlideFrameLayout extends LinearLayout {
 
     public SlideFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                Log.d("SlideFrameLayout", "dispatchTouchEvent : ACTION_DOWN");
+                break;
+            }
+            case MotionEvent.ACTION_MOVE:{
+                Log.d("SlideFrameLayout", "dispatchTouchEvent : ACTION_MOVE");
+                break;
+            }
+            case MotionEvent.ACTION_UP:{
+                Log.d("SlideFrameLayout", "dispatchTouchEvent : ACTION_UP");
+                break;
+            }
+            }
+        return super.dispatchTouchEvent(ev);
     }
 
     @Override
@@ -78,6 +101,9 @@ public class SlideFrameLayout extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(event.getAction()==MotionEvent.ACTION_DOWN){
+            intercepted=true;
+        }
         if(intercepted) {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_MOVE:{
@@ -106,6 +132,9 @@ public class SlideFrameLayout extends LinearLayout {
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 baseActivity.finish();
+                                if (Build.VERSION.SDK_INT>= Build.VERSION_CODES.LOLLIPOP) {
+                                    baseActivity.overridePendingTransition(R.anim.anim_slidefinish_helper, 0);
+                                }
                             }
 
                             @Override

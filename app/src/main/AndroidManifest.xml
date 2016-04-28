@@ -8,7 +8,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
     <activity android:name=".activity.MainActivity"
-        android:theme="@style/Theme.AppCompat.Translucent" >
+        android:theme="@style/AppTheme.Translucent" >
         >
         <intent-filter>
             <action android:name="android.intent.action.MAIN"/>

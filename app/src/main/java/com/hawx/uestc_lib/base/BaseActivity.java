@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -48,13 +49,14 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         version=Build.VERSION.SDK_INT;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (version>= Build.VERSION_CODES.KITKAT&&version<=Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             // Translucent status bar
             window.setFlags(
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
         add();
     }
     protected void add(){
@@ -146,17 +148,28 @@ public class BaseActivity extends AppCompatActivity {
                 .withNavigationIconToggler(toolbar)
                 .build(version);
         mActionBarDrawerToggle = new ActionBarDrawerToggle(this,
-                drawerLayout, toolbar, R.string.open, R.string.close){
+                drawerLayout, toolbar, R.string.open, R.string.close) {
             @Override
-            public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                slideFrameLayout.setDrawerOpened(true);
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                slideFrameLayout.setDrawerOpened(false);
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+                switch (newState) {
+                    case DrawerLayout.STATE_IDLE: {
+                        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                            slideFrameLayout.setDrawerOpened(true);
+                        } else {
+                            slideFrameLayout.setDrawerOpened(false);
+                        }
+                        break;
+                    }
+                    case DrawerLayout.STATE_DRAGGING: {
+                        slideFrameLayout.setDrawerOpened(true);
+                        break;
+                    }
+                    case DrawerLayout.STATE_SETTLING: {
+                        slideFrameLayout.setDrawerOpened(true);
+                        break;
+                    }
+                }
             }
         };
         mActionBarDrawerToggle.syncState();
