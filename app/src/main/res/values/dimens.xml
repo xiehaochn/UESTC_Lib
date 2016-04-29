@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="base_globalmenuitem_size">32dp</dimen>
+    <dimen name="base_globalmenuheader_size">48dp</dimen>
+    <dimen name="base_globalmenujiantou_size">24dp</dimen>
+
+    <dimen name="wighet_waitingdialog_defaultextsize">18sp</dimen>
+</resources>
