@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
 
@@ -13,8 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
-
         >
-
+        <com.hawx.uestc_lib.widget.WaitingDialog
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:arcColor="@color/colorPrimary"
+            app:speed="14"
+            app:clockWise="false"
+            app:isTextShow="true"
+            app:text="加载中"
+            app:textColor="@color/colorPrimary"
+            />
     </RelativeLayout>
 </LinearLayout>
