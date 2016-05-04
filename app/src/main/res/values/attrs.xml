@@ -10,4 +10,9 @@
         <attr name="isTextShow" format="boolean"/>
         <attr name="arcColor" format="color"/>
     </declare-styleable>
+    <declare-styleable name="ViewPagerTabPoints">
+        <attr name="pointsColor" format="color"/>
+        <attr name="pointsSize" format="dimension"/>
+        <attr name="interval" format="dimension"/>
+    </declare-styleable>
 </resources>

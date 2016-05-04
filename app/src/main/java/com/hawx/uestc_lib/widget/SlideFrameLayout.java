@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.base.BaseActivity;
@@ -24,7 +23,7 @@ import com.hawx.uestc_lib.utils.Utils;
 public class SlideFrameLayout extends FrameLayout {
     private static int DEFAULT_INTERCEPT_DP =8;
     private static int DEFAULT_FINISH_DP=140;
-    private boolean isDrawerOpened=false;
+    private boolean doNotIntercept =false;
     private int startX,currentX;
     private int interceptDp= DEFAULT_INTERCEPT_DP;
     private int finishDp= DEFAULT_FINISH_DP;
@@ -48,28 +47,11 @@ public class SlideFrameLayout extends FrameLayout {
         super(context, attrs, defStyleAttr);
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                Log.d("SlideFrameLayout", "dispatchTouchEvent : ACTION_DOWN");
-                break;
-            }
-            case MotionEvent.ACTION_MOVE:{
-                Log.d("SlideFrameLayout", "dispatchTouchEvent : ACTION_MOVE");
-                break;
-            }
-            case MotionEvent.ACTION_UP:{
-                Log.d("SlideFrameLayout", "dispatchTouchEvent : ACTION_UP");
-                break;
-            }
-            }
-        return super.dispatchTouchEvent(ev);
-    }
+
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(!isDrawerOpened) {
+        if(!doNotIntercept) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
                     Log.d("SlideFrameLayout", "onInterceptTouchEvent : ACTION_DOWN");
@@ -174,8 +156,9 @@ public class SlideFrameLayout extends FrameLayout {
         }
         return consum;
     }
-    public void setDrawerOpened(boolean isDrawerOpened){
-        this.isDrawerOpened=isDrawerOpened;
+
+    public void setDoNotIntercept(boolean isDrawerOpened){
+        this.doNotIntercept =isDrawerOpened;
     }
 
 }

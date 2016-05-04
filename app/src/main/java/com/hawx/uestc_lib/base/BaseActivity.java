@@ -155,18 +155,18 @@ public class BaseActivity extends AppCompatActivity {
                 switch (newState) {
                     case DrawerLayout.STATE_IDLE: {
                         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                            slideFrameLayout.setDrawerOpened(true);
+                            slideFrameLayout.setDoNotIntercept(true);
                         } else {
-                            slideFrameLayout.setDrawerOpened(false);
+                            slideFrameLayout.setDoNotIntercept(false);
                         }
                         break;
                     }
                     case DrawerLayout.STATE_DRAGGING: {
-                        slideFrameLayout.setDrawerOpened(true);
+                        slideFrameLayout.setDoNotIntercept(true);
                         break;
                     }
                     case DrawerLayout.STATE_SETTLING: {
-                        slideFrameLayout.setDrawerOpened(true);
+                        slideFrameLayout.setDoNotIntercept(true);
                         break;
                     }
                 }

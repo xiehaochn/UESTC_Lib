@@ -13,18 +13,23 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
+        android:background="@drawable/base_background"
         >
-        <com.hawx.uestc_lib.widget.WaitingDialog
+        <com.hawx.uestc_lib.widget.CustomViewPager
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            app:arcColor="@color/colorPrimary"
-            app:speed="14"
-            app:clockWise="false"
-            app:isTextShow="true"
-            app:text="加载中"
-            app:textColor="@color/colorPrimary"
+            android:id="@+id/activity_viewpager"
+            >
+        </com.hawx.uestc_lib.widget.CustomViewPager>
+        <com.hawx.uestc_lib.widget.ViewPagerTabPoints
+            android:id="@+id/activity_viewpagertabpoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/activity_viewpager"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            app:pointsColor="@android:color/white"
+            app:interval="13dp"
             />
     </RelativeLayout>
 </LinearLayout>

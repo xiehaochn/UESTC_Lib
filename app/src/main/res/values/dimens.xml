@@ -5,4 +5,6 @@
     <dimen name="base_globalmenujiantou_size">24dp</dimen>
 
     <dimen name="wighet_waitingdialog_defaultextsize">18sp</dimen>
+    <dimen name="wighet_viewpagertabpoints_defaultsize">3dp</dimen>
+    <dimen name="wighet_viewpagertabpoints_defaultinterval">10dp</dimen>
 </resources>
