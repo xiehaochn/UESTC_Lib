@@ -1,15 +1,26 @@
 package com.hawx.uestc_lib.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.adapter.PictureSlideViewPagerAdapter;
@@ -17,6 +28,7 @@ import com.hawx.uestc_lib.base.BaseActivity;
 import com.hawx.uestc_lib.widget.CustomViewPager;
 import com.hawx.uestc_lib.widget.SlideFrameLayout;
 import com.hawx.uestc_lib.widget.ViewPagerTabPoints;
+
 
 /**
  * MainActivity
@@ -28,12 +40,71 @@ public class MainActivity extends BaseActivity {
     private Toolbar.OnMenuItemClickListener menuItemClickListener;
     private CustomViewPager viewPager;
     private ViewPagerTabPoints viewPagerTabPoints;
+    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initToolBar();
         initViewPager();
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
+            getPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }else{
+            initData();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void getPermission(final String permission) {
+        int alreadyGetPermission=checkSelfPermission(permission);
+        if(alreadyGetPermission!=PackageManager.PERMISSION_GRANTED){
+            if(shouldShowRequestPermissionRationale(permission)) {
+                requestPermissions(new String[]{permission}, REQUEST_CODE_ASK_PERMISSIONS);
+            }else {
+                AlertDialog.Builder builder=new AlertDialog.Builder(this,R.style.CustomDialog);
+                builder.setMessage("需要以下权限：存储空间\n请手动开启！").setCancelable(false).setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                        Uri uri = Uri.fromParts("package", getPackageName(), null);
+                        intent.setData(uri);
+                        startActivity(intent);
+                        finishAll();
+                    }
+                }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        finishAll();
+                    }
+                }).create().show();
+            }
+        }else {
+            initData();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_CODE_ASK_PERMISSIONS:{
+                    if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                        initData();
+                    }else{
+                        toast("PermissionDenied!");
+                        finishAll();
+                    }
+                break;
+            }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+
+    }
+
+    private void initData() {
+        toast("Start Init Data");
     }
 
     private void initViewPager() {
@@ -43,16 +114,33 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onTouchEventDown() {
                 ViewGroup rootView= (ViewGroup) findViewById(android.R.id.content);
-                SlideFrameLayout slideFrameView= (SlideFrameLayout) rootView.getChildAt(0);
-                slideFrameView.setDoNotIntercept(true);
+                SlideFrameLayout slideFrameView;
+                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP) {
+                    slideFrameView = (SlideFrameLayout) rootView.getChildAt(0);
+                    slideFrameView.setDoNotIntercept(true);
+                }else{
+                    DrawerLayout drawerLayout= (DrawerLayout) rootView.getChildAt(0);
+                    FrameLayout drawerContentRoot = (FrameLayout) drawerLayout.getChildAt(0);
+                    slideFrameView= (SlideFrameLayout) drawerContentRoot.getChildAt(0);
+                    slideFrameView.setDoNotIntercept(true);
+                }
+
             }
         });
         viewPager.setListenerUp(new CustomViewPager.onTouchEventUpListener() {
             @Override
             public void onTouchEventUp() {
                 ViewGroup rootView= (ViewGroup) findViewById(android.R.id.content);
-                SlideFrameLayout slideFrameView= (SlideFrameLayout) rootView.getChildAt(0);
-                slideFrameView.setDoNotIntercept(false);
+                SlideFrameLayout slideFrameView;
+                if(Build.VERSION.SDK_INT<Build.VERSION_CODES.LOLLIPOP) {
+                    slideFrameView = (SlideFrameLayout) rootView.getChildAt(0);
+                    slideFrameView.setDoNotIntercept(false);
+                }else{
+                    DrawerLayout drawerLayout= (DrawerLayout) rootView.getChildAt(0);
+                    FrameLayout drawerContentRoot = (FrameLayout) drawerLayout.getChildAt(0);
+                    slideFrameView= (SlideFrameLayout) drawerContentRoot.getChildAt(0);
+                    slideFrameView.setDoNotIntercept(false);
+                }
             }
         });
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
