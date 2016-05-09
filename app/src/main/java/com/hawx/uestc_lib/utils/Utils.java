@@ -1,12 +1,15 @@
 package com.hawx.uestc_lib.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.Rect;
 import android.view.Display;
 import android.view.WindowManager;
 
 import java.lang.reflect.Field;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Created by Administrator on 2016/4/20.
@@ -43,5 +46,10 @@ public class Utils  {
         Bitmap newBitmap = Bitmap.createScaledBitmap(realImage, width,
                 height, filter);
         return newBitmap;
+    }
+    public static int getStatusBarHeight(Activity activity){
+        Rect frame = new Rect();
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        return frame.top;
     }
 }

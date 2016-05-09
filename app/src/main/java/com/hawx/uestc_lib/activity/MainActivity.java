@@ -1,6 +1,8 @@
 package com.hawx.uestc_lib.activity;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,19 +17,42 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.adapter.PictureSlideViewPagerAdapter;
 import com.hawx.uestc_lib.base.BaseActivity;
+import com.hawx.uestc_lib.utils.Utils;
 import com.hawx.uestc_lib.widget.CustomViewPager;
+import com.hawx.uestc_lib.widget.SelectDialog;
 import com.hawx.uestc_lib.widget.SlideFrameLayout;
 import com.hawx.uestc_lib.widget.ViewPagerTabPoints;
+import com.hawx.uestc_lib.widget.WaitingDialog;
+
+import org.json.JSONObject;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -35,17 +60,39 @@ import com.hawx.uestc_lib.widget.ViewPagerTabPoints;
  * @author Hawx
  * @version 1.0
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements View.OnClickListener{
     private Toolbar toolbar;
     private Toolbar.OnMenuItemClickListener menuItemClickListener;
     private CustomViewPager viewPager;
     private ViewPagerTabPoints viewPagerTabPoints;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-
+    private RequestQueue requestQueue;
+    private boolean isLoading=false;
+    private static final String URL ="http://apis.juhe.cn/goodbook/query";
+    public static final String APPKEY ="2f0af81454a23554f12f800d259e5e60";
+    @BindView(R.id.activity_main_textbutton_more)
+    TextView text_button_more;
+    @BindView(R.id.activity_main_gridlayout)
+    GridLayout gridLayout;
+    @BindView(R.id.activity_main_button_242)
+    Button button_242;
+    @BindView(R.id.activity_main_button_243)
+    Button button_243;
+    @BindView(R.id.activity_main_button_244)
+    Button button_244;
+    @BindView(R.id.activity_main_button_248)
+    Button button_248;
+    @BindView(R.id.activity_main_button_252)
+    Button button_252;
+    @BindView(R.id.activity_main_button_257)
+    Button button_257;
+    @BindView(R.id.activity_main_waitingdialog)
+    WaitingDialog waitingDialog;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         initToolBar();
         initViewPager();
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M) {
@@ -53,6 +100,30 @@ public class MainActivity extends BaseActivity {
         }else{
             initData();
         }
+        text_button_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final SelectDialog selectDialog=new SelectDialog(MainActivity.this,R.style.SelectDialog);
+                selectDialog.setCancelable(true);
+                Window dialogWindow=selectDialog.getWindow();
+                WindowManager.LayoutParams params=dialogWindow.getAttributes();
+                dialogWindow.setGravity(Gravity.CENTER);
+                int[] location=new int[2];
+                gridLayout.getLocationOnScreen(location);
+                params.y=(Utils.getStatusBarHeight(MainActivity.this)+Utils.getWindowHeight(MainActivity.this))/2-location[1];
+                dialogWindow.setAttributes(params);
+                dialogWindow.setWindowAnimations(R.style.SelectDialogAnim);
+                selectDialog.show();
+                selectDialog.setListener(new SelectDialog.dialogSelectedListener() {
+                    @Override
+                    public void dialogSelected() {
+                        if(!isLoading){
+                            gridLayoutAnimation(selectDialog.getCatalog_ID(),selectDialog.getCatalog());
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @TargetApi(Build.VERSION_CODES.M)
@@ -105,6 +176,8 @@ public class MainActivity extends BaseActivity {
 
     private void initData() {
         toast("Start Init Data");
+        requestQueue=Volley.newRequestQueue(this);
+        requestQueue.start();
     }
 
     private void initViewPager() {
@@ -224,5 +297,107 @@ public class MainActivity extends BaseActivity {
         MenuInflater menuInflater=new MenuInflater(this);
         menuInflater.inflate(R.menu.menu_main,menu);
         return super.onCreateOptionsMenu(menu);
+    }
+    @OnClick({R.id.activity_main_button_243,R.id.activity_main_button_257,R.id.activity_main_button_252,R.id.activity_main_button_248,
+            R.id.activity_main_button_244,R.id.activity_main_button_242})
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.activity_main_button_242:{
+                if(!isLoading){
+                    gridLayoutAnimation(242,"中国文学");
+                }
+                break;
+            }
+            case R.id.activity_main_button_252:{
+                if(!isLoading){
+                    gridLayoutAnimation(252,"人物传记");
+                }
+                break;
+            }
+            case R.id.activity_main_button_244:{
+                if(!isLoading){
+                    gridLayoutAnimation(244,"儿童文学");
+                }
+                break;
+            }
+            case R.id.activity_main_button_248:{
+                if(!isLoading){
+                    gridLayoutAnimation(248,"历史");
+                }
+                break;
+            }
+            case R.id.activity_main_button_257:{
+                if(!isLoading){
+                    gridLayoutAnimation(257,"哲学");
+                }
+                break;
+            }
+            case R.id.activity_main_button_243:{
+                if(!isLoading){
+                    gridLayoutAnimation(243,"外国文学");
+                }
+                break;
+            }
+            default:
+                break;
+        }
+    }
+    private void sendRequest(int catalog_ID, final String catalog){
+        isLoading=true;
+        waitingDialog.setVisibility(View.VISIBLE);
+        final String requestBody="catalog_id="+catalog_ID+"&pn=&rn=15&dtype=&key="+APPKEY;
+        String requestURL=URL+"?"+requestBody;
+        log(requestURL);
+        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestURL, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                waitingDialog.setVisibility(View.INVISIBLE);
+                isLoading=false;
+                gridLayout.setAlpha(1f);
+                Intent intent=new Intent(MainActivity.this,BookListActivity.class);
+                intent.putExtra("catalog",catalog);
+                intent.putExtra("data",response.toString());
+                log(response.toString());
+                startActivity(intent);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                waitingDialog.setVisibility(View.INVISIBLE);
+                isLoading=false;
+                gridLayout.setAlpha(1f);
+                toast("网络连接错误");
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void gridLayoutAnimation(final int catalog_ID, final String catalog) {
+        ObjectAnimator gridLayoutAnimator=new ObjectAnimator().ofFloat(gridLayout,"alpha",1,0);
+        gridLayoutAnimator.setInterpolator(new AccelerateInterpolator());
+        gridLayoutAnimator.setDuration(500);
+        gridLayoutAnimator.start();
+        gridLayoutAnimator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                sendRequest(catalog_ID,catalog);
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 }

@@ -44,6 +44,7 @@ public class BaseActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private int version;
+    private boolean needLeftMenu=true;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -102,7 +103,9 @@ public class BaseActivity extends AppCompatActivity {
         LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         slideFrameLayout.addView(contentView,fp);
         super.setContentView(slideFrameLayout);
-        setupDrawer();
+        if(needLeftMenu) {
+            setupDrawer();
+        }
     }
 
 
@@ -119,7 +122,9 @@ public class BaseActivity extends AppCompatActivity {
         LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         slideFrameLayout.addView(contentView,fp);
         super.setContentView(slideFrameLayout,params);
-        setupDrawer();
+        if(needLeftMenu) {
+            setupDrawer();
+        }
     }
 
     @Override
@@ -134,7 +139,9 @@ public class BaseActivity extends AppCompatActivity {
         LinearLayout.LayoutParams fp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         slideFrameLayout.addView(contentView,fp);
         super.setContentView(slideFrameLayout);
-        setupDrawer();
+        if(needLeftMenu) {
+            setupDrawer();
+        }
     }
     /**注入抽屉导航*/
     private void setupDrawer() {
@@ -175,5 +182,9 @@ public class BaseActivity extends AppCompatActivity {
         mActionBarDrawerToggle.syncState();
         drawerLayout.addDrawerListener(mActionBarDrawerToggle);
 
+    }
+
+    public void setNeedLeftMenu(boolean needLeftMenu) {
+        this.needLeftMenu = needLeftMenu;
     }
 }
