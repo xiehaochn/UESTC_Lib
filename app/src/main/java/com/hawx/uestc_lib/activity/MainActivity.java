@@ -41,6 +41,7 @@ import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.adapter.PictureSlideViewPagerAdapter;
 import com.hawx.uestc_lib.base.BaseActivity;
+import com.hawx.uestc_lib.data.ResponseData;
 import com.hawx.uestc_lib.utils.Utils;
 import com.hawx.uestc_lib.widget.CustomViewPager;
 import com.hawx.uestc_lib.widget.SelectDialog;
@@ -48,6 +49,7 @@ import com.hawx.uestc_lib.widget.SlideFrameLayout;
 import com.hawx.uestc_lib.widget.ViewPagerTabPoints;
 import com.hawx.uestc_lib.widget.WaitingDialog;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.BindView;
@@ -107,10 +109,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 selectDialog.setCancelable(true);
                 Window dialogWindow=selectDialog.getWindow();
                 WindowManager.LayoutParams params=dialogWindow.getAttributes();
-                dialogWindow.setGravity(Gravity.CENTER);
+                dialogWindow.setGravity(Gravity.TOP);
                 int[] location=new int[2];
                 gridLayout.getLocationOnScreen(location);
-                params.y=(Utils.getStatusBarHeight(MainActivity.this)+Utils.getWindowHeight(MainActivity.this))/2-location[1];
+                params.y=location[1]-Utils.getStatusBarHeight(MainActivity.this);
                 dialogWindow.setAttributes(params);
                 dialogWindow.setWindowAnimations(R.style.SelectDialogAnim);
                 selectDialog.show();
@@ -353,13 +355,22 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onResponse(JSONObject response) {
                 waitingDialog.setVisibility(View.INVISIBLE);
-                isLoading=false;
+                isLoading = false;
                 gridLayout.setAlpha(1f);
-                Intent intent=new Intent(MainActivity.this,BookListActivity.class);
-                intent.putExtra("catalog",catalog);
-                intent.putExtra("data",response.toString());
-                log(response.toString());
-                startActivity(intent);
+                ResponseData responseData=new ResponseData();
+                try {
+                    responseData=ResponseData.jsonToData(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(responseData.getResultcode().equals("200")) {
+                    Intent intent = new Intent(MainActivity.this, BookListActivity.class);
+                    intent.putExtra("catalog", catalog);
+                    intent.putExtra("data", responseData.getResult().toString());
+                    startActivity(intent);
+                }else{
+                    toast("网络连接错误");
+                }
             }
         }, new Response.ErrorListener() {
             @Override

@@ -19,4 +19,20 @@ public class ResponseData {
         responseData.error_code=jsonObject.getInt("error_code");
         return responseData;
     }
+
+    public String getResultcode() {
+        return resultcode;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public JSONObject getResult() {
+        return result;
+    }
+
+    public int getError_code() {
+        return error_code;
+    }
 }

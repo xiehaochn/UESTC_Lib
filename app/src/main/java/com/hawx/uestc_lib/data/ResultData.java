@@ -20,4 +20,20 @@ public class ResultData {
         resultData.rn=jsonObject.getString("rn");
         return resultData;
     }
+
+    public JSONArray getData() {
+        return data;
+    }
+
+    public String getTotalNum() {
+        return totalNum;
+    }
+
+    public int getPn() {
+        return pn;
+    }
+
+    public String getRn() {
+        return rn;
+    }
 }

@@ -7,4 +7,5 @@
     <dimen name="wighet_waitingdialog_defaultextsize">18sp</dimen>
     <dimen name="wighet_viewpagertabpoints_defaultsize">3dp</dimen>
     <dimen name="wighet_viewpagertabpoints_defaultinterval">10dp</dimen>
+    <dimen name="viewholder_bookdetail_bookpicsize">120dp</dimen>
 </resources>

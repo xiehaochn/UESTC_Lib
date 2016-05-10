@@ -30,4 +30,39 @@ public class BookDetailData {
         return bookDetailData;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public String getCatalog() {
+        return catalog;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public String getSub1() {
+        return sub1;
+    }
+
+    public String getSub2() {
+        return sub2;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public String getReading() {
+        return reading;
+    }
+
+    public String getOnline() {
+        return online;
+    }
+
+    public String getBytime() {
+        return bytime;
+    }
 }
