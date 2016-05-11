@@ -20,5 +20,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         ></android.support.v7.widget.RecyclerView>
+        <com.hawx.uestc_lib.widget.PullUpToRefresh
+            android:id="@+id/activity_booklist_pulluptorefresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:ringColor="@color/colorPrimary"
+            android:visibility="invisible"
+            />
     </RelativeLayout>
+
 </LinearLayout>

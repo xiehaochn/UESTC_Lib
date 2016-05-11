@@ -18,6 +18,8 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.data.BookDetailData;
+import com.hawx.uestc_lib.utils.Utils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,16 +55,25 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
     public void onBindViewHolder(BookDetailVH holder, int position) {
         BookDetailData data=bookDetailDatas.get(position);
         holder.bookTitle.setText(data.getTitle());
+        if(data.getTitle().length()>10) {
+            holder.bookTitle.setTextSize(18);
+        }
         holder.bookReading.setText(data.getReading());
         if(bitmapHashMap.get(position)==null) {
             addBookPic(position,data.getImg(), holder);
         }else{
             holder.bookPic.setImageBitmap(bitmapHashMap.get(position));
         }
+        String[] tags=data.getTags().split(" ");
+        String tag="";
+        for(int i=0;i<5&&i<tags.length;i++){
+            tag+=tags[i]+"  ";
+        }
+        holder.bookTags.setText(tag);
     }
 
     private void addBookPic(final int position, String imageURL, final BookDetailVH holder) {
-        int maxSize=context.getResources().getDimensionPixelSize(R.dimen.viewholder_bookdetail_bookpicsize);
+        final int maxSize=context.getResources().getDimensionPixelSize(R.dimen.viewholder_bookdetail_bookpicsize);
         requestQueue.add(new ImageRequest(imageURL, new Response.Listener<Bitmap>() {
             @Override
             public void onResponse(Bitmap response) {
@@ -72,8 +83,10 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
         }, maxSize, maxSize, ImageView.ScaleType.FIT_XY, null, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                holder.bookPic.setImageResource(R.drawable.viewholder_bookdetail_errorpic);
-                bitmapHashMap.put(position, BitmapFactory.decodeResource(context.getResources(),R.drawable.viewholder_bookdetail_errorpic));
+                Bitmap loading_failed=BitmapFactory.decodeResource(context.getResources(),R.drawable.viewholder_bookdetail_errorpic);
+                Bitmap scaled=Utils.scaleDown(loading_failed,maxSize,false);
+                holder.bookPic.setImageBitmap(scaled);
+                bitmapHashMap.put(position,scaled);
             }
         }));
     }
@@ -87,6 +100,8 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
         TextView bookTitle;
         @BindView(R.id.viewholder_bookdetail_reading)
         TextView bookReading;
+        @BindView(R.id.viewholder_bookdetail_tags)
+        TextView bookTags;
         public BookDetailVH(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
@@ -97,4 +112,5 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
         this.bookDetailDatas = bookDetailDatas;
         notifyDataSetChanged();
     }
+
 }

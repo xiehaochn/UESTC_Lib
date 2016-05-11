@@ -62,7 +62,7 @@ public class WaitingDialog extends View {
             text=a.getString(R.styleable.WaitingDialog_text);
             clockWise=a.getBoolean(R.styleable.WaitingDialog_clockWise,true);
             textTop=a.getBoolean(R.styleable.WaitingDialog_textTop,true);
-            textSize=a.getDimensionPixelSize(R.styleable.WaitingDialog_textSize,getResources().getDimensionPixelSize(R.dimen.wighet_waitingdialog_defaultextsize));
+            textSize=a.getDimensionPixelSize(R.styleable.WaitingDialog_textSize,getResources().getDimensionPixelSize(R.dimen.widget_waitingdialog_defaultextsize));
             textColor=a.getColor(R.styleable.WaitingDialog_textColor, Color.GRAY);
             isTextShow=a.getBoolean(R.styleable.WaitingDialog_isTextShow,false);
             arcColor=a.getColor(R.styleable.WaitingDialog_arcColor,Color.GRAY);

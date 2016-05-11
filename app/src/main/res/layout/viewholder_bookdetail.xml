@@ -4,6 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="2dp"
+    android:layout_marginLeft="2dp"
+    android:layout_marginRight="2dp"
+    android:layout_marginTop="4dp"
+
     >
     <RelativeLayout
         android:layout_width="match_parent"
@@ -29,6 +33,7 @@
         android:gravity="center"
         android:layout_marginTop="5dp"
         android:layout_marginLeft="10dp"
+
         />
 
 
@@ -50,7 +55,33 @@
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="5dp"
             />
-
+        <ImageView
+            android:id="@+id/viewholder_bookdetail_imageview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewholder_bookdetail_reading"
+            android:layout_toRightOf="@id/viewholder_bookdetail_bookpic"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/veiwholder_bookdetail_tagsbutton"
+            />
+        <TextView
+            android:id="@+id/viewholder_bookdetail_tags"
+            android:layout_below="@id/viewholder_bookdetail_reading"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/viewholder_bookdetail_imageview1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="testTags testTags testTags testTags testTags testTags "
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:gravity="left"
+            android:textSize="13sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:lineSpacingMultiplier="1.5"
+            />
     </RelativeLayout>
 
 </android.support.v7.widget.CardView>

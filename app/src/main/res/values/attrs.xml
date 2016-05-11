@@ -15,4 +15,9 @@
         <attr name="pointsSize" format="dimension"/>
         <attr name="interval" format="dimension"/>
     </declare-styleable>
+    <declare-styleable name="PullUpToRefresh">
+        <attr name="ringColor" format="color"/>
+        <attr name="radio" format="dimension"/>
+        <attr name="strokeWidth" format="dimension"/>
+    </declare-styleable>
 </resources>

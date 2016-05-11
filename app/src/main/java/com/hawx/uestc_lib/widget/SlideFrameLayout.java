@@ -104,7 +104,7 @@ public class SlideFrameLayout extends FrameLayout {
                     intercepted = false;
                     if (startX - currentX >Utils.dpTopx(context, finishDp) ) {
                         AnimatorSet finishSet=new AnimatorSet();
-                        ObjectAnimator finishAnimTransX = new ObjectAnimator().ofFloat(getChildAt(0), "translationX",currentTranslationX,- Utils.getWindowWidth(context));
+                        ObjectAnimator finishAnimTransX = ObjectAnimator.ofFloat(getChildAt(0), "translationX",currentTranslationX,- Utils.getWindowWidth(context));
                         finishAnimTransX.addListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animation) {
@@ -131,7 +131,7 @@ public class SlideFrameLayout extends FrameLayout {
                         });
                         finishAnimTransX.setInterpolator(accelerateInterpolator);
                         finishAnimTransX.setDuration(500);
-                        ObjectAnimator finishAnimAlpha=new ObjectAnimator().ofFloat(getChildAt(0),"alpha",currentAlpha,0);
+                        ObjectAnimator finishAnimAlpha=ObjectAnimator.ofFloat(getChildAt(0),"alpha",currentAlpha,0);
                         finishAnimAlpha.setInterpolator(accelerateInterpolator);
                         finishAnimAlpha.setDuration(500);
                         finishSet.play(finishAnimTransX).with(finishAnimAlpha);
@@ -139,10 +139,10 @@ public class SlideFrameLayout extends FrameLayout {
                     }else{
                         if(currentTranslationX<0) {
                             AnimatorSet resetSet=new AnimatorSet();
-                            ObjectAnimator resetAlpha=new ObjectAnimator().ofFloat(getChildAt(0),"alpha",currentAlpha,1);
+                            ObjectAnimator resetAlpha=ObjectAnimator.ofFloat(getChildAt(0),"alpha",currentAlpha,1);
                             resetAlpha.setInterpolator(accelerateInterpolator);
                             resetAlpha.setDuration(300);
-                            ObjectAnimator resetTranX = new ObjectAnimator().ofFloat(this.getChildAt(0), "TranslationX", currentTranslationX, 0);
+                            ObjectAnimator resetTranX =  ObjectAnimator.ofFloat(this.getChildAt(0), "TranslationX", currentTranslationX, 0);
                             resetTranX.setInterpolator(accelerateInterpolator);
                             resetTranX.setDuration(300);
                             resetSet.play(resetTranX).with(resetAlpha);

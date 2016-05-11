@@ -31,8 +31,8 @@ public class ViewPagerTabPoints extends View {
         TypedArray a=context.getTheme().obtainStyledAttributes(attrs,R.styleable.ViewPagerTabPoints,0,0);
         try{
             pointsColor=a.getColor(R.styleable.ViewPagerTabPoints_pointsColor,Color.GRAY);
-            radio =a.getDimensionPixelSize(R.styleable.ViewPagerTabPoints_pointsSize,getResources().getDimensionPixelOffset(R.dimen.wighet_viewpagertabpoints_defaultsize));
-            interval=a.getDimensionPixelSize(R.styleable.ViewPagerTabPoints_interval,getResources().getDimensionPixelOffset(R.dimen.wighet_viewpagertabpoints_defaultinterval));
+            radio =a.getDimensionPixelSize(R.styleable.ViewPagerTabPoints_pointsSize,getResources().getDimensionPixelOffset(R.dimen.widget_viewpagertabpoints_defaultsize));
+            interval=a.getDimensionPixelSize(R.styleable.ViewPagerTabPoints_interval,getResources().getDimensionPixelOffset(R.dimen.widget_viewpagertabpoints_defaultinterval));
         }finally {
             a.recycle();
         }

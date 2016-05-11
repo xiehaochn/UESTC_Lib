@@ -16,6 +16,7 @@ import com.hawx.uestc_lib.base.BaseActivity;
 import com.hawx.uestc_lib.data.BookDetailData;
 import com.hawx.uestc_lib.data.ResponseData;
 import com.hawx.uestc_lib.data.ResultData;
+import com.hawx.uestc_lib.widget.PullUpToRefresh;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,9 +35,11 @@ public class BookListActivity extends BaseActivity {
     private String catalog;
     private ArrayList<BookDetailData> bookDetailDatas=new ArrayList<BookDetailData>();
     private BookListAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    private LinearLayoutManager layoutManager;
     @BindView(R.id.activity_booklist_recyclerview)
     RecyclerView recyclerView;
+    @BindView(R.id.activity_booklist_pulluptorefresh)
+    PullUpToRefresh refreshCircle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -68,13 +71,36 @@ public class BookListActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState== RecyclerView.SCROLL_STATE_IDLE){
+                    if(layoutManager.findLastCompletelyVisibleItemPosition()==adapter.getItemCount()-1){
+                        refreshCircle.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+        refreshCircle.setStartRefreshingListener(new PullUpToRefresh.startRefreshingListener() {
+            @Override
+            public void startRefreshing() {
+                toast("Start Refreshing");
+                refreshCircle.postDelayed(new Runnable() {
+                    @Override
+                      public void run() {
+                        refreshCircle.setRefreshing(false);
+                        toast("End Refreshing");
+                    }
+                },5000);
+            }
+        });
     }
 
     private void initToolBar() {
         toolbar= (Toolbar) findViewById(R.id.base_toolbar);
         catalog=getIntent().getExtras().getString("catalog");
         toolbar.setTitle(catalog);
-        toolbar.setTitleTextAppearance(this,R.style.ToolBarTitleText);
         toolbar.setNavigationIcon(R.mipmap.icon_navigation_back);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -84,4 +110,11 @@ public class BookListActivity extends BaseActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        bookDetailDatas.clear();
+        super.onDestroy();
+    }
+
 }

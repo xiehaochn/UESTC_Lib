@@ -4,8 +4,10 @@
     <dimen name="base_globalmenuheader_size">48dp</dimen>
     <dimen name="base_globalmenujiantou_size">24dp</dimen>
 
-    <dimen name="wighet_waitingdialog_defaultextsize">18sp</dimen>
-    <dimen name="wighet_viewpagertabpoints_defaultsize">3dp</dimen>
-    <dimen name="wighet_viewpagertabpoints_defaultinterval">10dp</dimen>
+    <dimen name="widget_waitingdialog_defaultextsize">18sp</dimen>
+    <dimen name="widget_viewpagertabpoints_defaultsize">3dp</dimen>
+    <dimen name="widget_viewpagertabpoints_defaultinterval">10dp</dimen>
     <dimen name="viewholder_bookdetail_bookpicsize">120dp</dimen>
+    <dimen name="widget_pulluptorefresh_radio">10dp</dimen>
+    <dimen name="widget_pulluptorefresh_strokewidth">3dp</dimen>
 </resources>
