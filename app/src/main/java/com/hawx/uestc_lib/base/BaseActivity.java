@@ -3,6 +3,7 @@ package com.hawx.uestc_lib.base;
 
 
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
@@ -22,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hawx.uestc_lib.R;
+import com.hawx.uestc_lib.activity.LoginActivity;
+import com.hawx.uestc_lib.adapter.GlobalLeftMenuAdapter;
 import com.hawx.uestc_lib.utils.DrawerLayoutInstaller;
 import com.hawx.uestc_lib.utils.Utils;
 import com.hawx.uestc_lib.widget.GlobalLeftMenu;
@@ -45,7 +48,7 @@ public class BaseActivity extends AppCompatActivity {
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private int version;
     private boolean needLeftMenu=true;
-
+    private String tag;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +60,6 @@ public class BaseActivity extends AppCompatActivity {
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS,
                     WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-
         add();
     }
     protected void add(){
@@ -145,8 +147,10 @@ public class BaseActivity extends AppCompatActivity {
     }
     /**注入抽屉导航*/
     private void setupDrawer() {
-        GlobalLeftMenu globalLeftMenu=new GlobalLeftMenu(this);
+        GlobalLeftMenu globalLeftMenu=new GlobalLeftMenu(this,tag);
         toolbar= (Toolbar) slideFrameLayout.findViewById(R.id.base_toolbar);
+        toolbar.setSubtitle(tag);
+        toolbar.setSubtitleTextAppearance(this,R.style.SubTitleText);
         setSupportActionBar(toolbar);
         drawerLayout = DrawerLayoutInstaller.from(this)
                 .drawerRoot(R.layout.base_drawerlayout)
@@ -181,10 +185,27 @@ public class BaseActivity extends AppCompatActivity {
         };
         mActionBarDrawerToggle.syncState();
         drawerLayout.addDrawerListener(mActionBarDrawerToggle);
-
+        globalLeftMenu.getAdapter().setListener(new GlobalLeftMenuAdapter.NeedCloseDrawerListener() {
+            @Override
+            public void needCloseDrawer() {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            }
+        });
+        globalLeftMenu.setOnHeaderClickListener(new GlobalLeftMenu.OnHeaderClickListener() {
+            @Override
+            public void onGlobalMenuHeaderClick(View v) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+                Intent intent=new Intent(BaseActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     public void setNeedLeftMenu(boolean needLeftMenu) {
         this.needLeftMenu = needLeftMenu;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
     }
 }

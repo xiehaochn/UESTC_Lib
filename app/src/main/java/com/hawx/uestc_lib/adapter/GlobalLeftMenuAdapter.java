@@ -1,14 +1,22 @@
 package com.hawx.uestc_lib.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hawx.uestc_lib.R;
+import com.hawx.uestc_lib.activity.AboutActivity;
+import com.hawx.uestc_lib.activity.CollectionActivity;
+import com.hawx.uestc_lib.activity.MainActivity;
+import com.hawx.uestc_lib.activity.SearchActivity;
+import com.hawx.uestc_lib.activity.SettingActivity;
+import com.hawx.uestc_lib.activity.UserCenterActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +30,14 @@ public class GlobalLeftMenuAdapter extends ArrayAdapter<GlobalLeftMenuAdapter.Gl
     private static final int TYPE_MENU_ITEM = 0;
     private static final int TYPE_DIVIDER = 1;
     private final List<GlobalMenuItem> list=new ArrayList<GlobalMenuItem>();
+    private NeedCloseDrawerListener listener;
     private final LayoutInflater layoutInflater;
-    public GlobalLeftMenuAdapter(Context context) {
+    private String tag;
+    private Context context;
+    public GlobalLeftMenuAdapter(Context context, String tag) {
         super(context,0);
+        this.tag=tag;
+        this.context=context;
         layoutInflater=LayoutInflater.from(context);
         setupMenuItems();
     }
@@ -75,9 +88,51 @@ public class GlobalLeftMenuAdapter extends ArrayAdapter<GlobalLeftMenuAdapter.Gl
             }else {
                 holder= (MenuItemViewHolder) convertView.getTag();
             }
-            GlobalMenuItem item=list.get(position);
+            final GlobalMenuItem item=list.get(position);
             holder.iconImage.setImageResource(item.iconResID);
             holder.labelText.setText(item.label);
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(listener!=null)
+                        listener.needCloseDrawer();
+                    switch (item.label){
+                        case "主页":{
+                            Intent intent=new Intent(context,MainActivity.class);
+                            context.startActivity(intent);
+                            break;
+                        }
+                        case "馆藏查询":{
+                            Intent intent=new Intent(context,SearchActivity.class);
+                            context.startActivity(intent);
+                            break;
+                        }
+                        case "个人中心":{
+                            Intent intent=new Intent(context,UserCenterActivity.class);
+                            context.startActivity(intent);
+                            break;
+                        }
+                        case "我的收藏":{
+                            Intent intent=new Intent(context,CollectionActivity.class);
+                            context.startActivity(intent);
+                            break;
+                        }
+                        case "设置":{
+                            Intent intent=new Intent(context,SettingActivity.class);
+                            context.startActivity(intent);
+                            break;
+                        }
+                        case "关于":{
+                            Intent intent=new Intent(context,AboutActivity.class);
+                            context.startActivity(intent);
+                            break;
+                        }
+                        default:
+                            break;
+                    }
+                }
+            });
+            convertView.setBackgroundResource(R.drawable.globalmenu_button_background);
             return convertView;
         }else {
             return layoutInflater.inflate(R.layout.base_globalmenu_divider,parent,false);
@@ -113,5 +168,12 @@ public class GlobalLeftMenuAdapter extends ArrayAdapter<GlobalLeftMenuAdapter.Gl
             iconImage= (ImageView) view.findViewById(R.id.base_globalmenuitem_image);
             labelText= (TextView) view.findViewById(R.id.base_globalmenuitem_text);
         }
+    }
+    public interface NeedCloseDrawerListener{
+        void needCloseDrawer();
+    }
+
+    public void setListener(NeedCloseDrawerListener listener) {
+        this.listener = listener;
     }
 }

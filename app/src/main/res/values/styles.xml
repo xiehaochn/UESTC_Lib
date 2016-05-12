@@ -41,4 +41,8 @@
         <item name="android:windowEnterAnimation">@anim/anim_selectdialog_in</item>
         <item name="android:windowExitAnimation">@anim/anim_selectdialog_out</item>
     </style>
+    <style name="SubTitleText">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@android:color/darker_gray</item>
+    </style>
 </resources>

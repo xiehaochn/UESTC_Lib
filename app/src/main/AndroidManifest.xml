@@ -10,7 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activity.MainActivity"
-            android:theme="@style/AppTheme.Translucent" >
+            android:theme="@style/AppTheme.Translucent"
+            android:launchMode="singleTask"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -18,6 +20,41 @@
         </activity>
         <activity android:name=".activity.BookListActivity"
             android:theme="@style/AppTheme.Translucent"
+            >
+        </activity>
+        <activity android:name=".activity.SearchActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:launchMode="singleTop"
+            >
+
+        </activity>
+        <activity android:name=".activity.UserCenterActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:launchMode="singleTop"
+            >
+
+        </activity>
+        <activity android:name=".activity.CollectionActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:launchMode="singleTop"
+            >
+
+        </activity>
+        <activity android:name=".activity.SettingActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:launchMode="singleTop"
+            >
+
+        </activity>
+        <activity android:name=".activity.AboutActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:launchMode="singleTop"
+            >
+
+        </activity>
+        <activity android:name=".activity.LoginActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:launchMode="singleTop"
             >
 
         </activity>

@@ -21,10 +21,11 @@ public class GlobalLeftMenu  extends ListView implements View.OnClickListener{
     private Context context;
     private GlobalLeftMenuAdapter adapter;
     private ImageView globalmenuavatar;
-
-    public GlobalLeftMenu(Context context) {
+    private String tag;
+    public GlobalLeftMenu(Context context, String tag) {
         super(context);
         this.context=context;
+        this.tag=tag;
         init();
     }
 
@@ -50,7 +51,7 @@ public class GlobalLeftMenu  extends ListView implements View.OnClickListener{
     }
 
     private void setupAdapter() {
-        adapter=new GlobalLeftMenuAdapter(context);
+        adapter=new GlobalLeftMenuAdapter(context,tag);
         setAdapter(adapter);
     }
 
@@ -82,5 +83,10 @@ public class GlobalLeftMenu  extends ListView implements View.OnClickListener{
     }
     public void setOnHeaderClickListener(OnHeaderClickListener onHeaderClickListener) {
         this.onHeaderClickListener = onHeaderClickListener;
+    }
+
+    @Override
+    public GlobalLeftMenuAdapter getAdapter() {
+        return adapter;
     }
 }
