@@ -5,13 +5,69 @@
     <include layout="@layout/base_toolbar"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
-            android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/base_background"
+        >
+        <ImageButton
+            android:layout_alignParentTop="true"
+            android:id="@+id/activity_search_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SearchActivity"
+            android:layout_alignParentEnd="true"
+            android:src="@mipmap/icon_searchactivity_button"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:padding="10dp"
+            android:layout_marginTop="10dp"
 
             />
+        <EditText
+            android:layout_alignParentTop="true"
+            android:id="@+id/activity_search_edittext"
+            android:layout_toStartOf="@id/activity_search_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/search_edittext_background"
+            android:maxLines="1"
+            android:minHeight="40dp"
+            android:layout_toLeftOf="@id/activity_search_button"
+            android:layout_marginLeft="40dp"
+            android:hint="请输入关键字"
+            android:gravity="center"
+            />
+        <ImageView
+            android:id="@+id/activity_search_splitline"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/white"
+            android:layout_below="@id/activity_search_edittext"
+            android:layout_marginTop="5dp"
+            />
+        <TextView
+            android:id="@+id/activity_search_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="暂无搜索结果"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:visibility="visible"
+            />
+        <ListView
+            android:layout_below="@id/activity_search_splitline"
+            android:layout_marginTop="5dp"
+            android:id="@+id/activity_search_listview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:visibility="invisible"
 
+            >
+
+        </ListView>
     </RelativeLayout>
 </LinearLayout>

@@ -24,37 +24,44 @@
         </activity>
         <activity android:name=".activity.SearchActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustPan"
             >
 
         </activity>
         <activity android:name=".activity.UserCenterActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             >
 
         </activity>
         <activity android:name=".activity.CollectionActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             >
 
         </activity>
         <activity android:name=".activity.SettingActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             >
 
         </activity>
         <activity android:name=".activity.AboutActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             >
 
         </activity>
         <activity android:name=".activity.LoginActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
+            >
+
+        </activity>
+        <activity android:name=".activity.SearchDetailActivity"
+            android:theme="@style/AppTheme.Translucent"
+            android:launchMode="singleTask"
             >
 
         </activity>
