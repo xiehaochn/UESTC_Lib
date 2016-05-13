@@ -5,13 +5,47 @@
     <include layout="@layout/base_toolbar"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
+        android:layout_height="match_parent"
+        android:background="@drawable/base_background">
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:id="@+id/activity_collection_linearlayout"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="收藏列表"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@android:color/white"
+                />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/white"
+                android:padding="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                />
+        <ListView
+            android:id="@+id/activity_collection_listview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="CollectionActivity"
-
+            android:padding="2dp"
             />
-
+        </LinearLayout>
+        <TextView
+            android:visibility="invisible"
+            android:id="@+id/activity_collection_pretextview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="暂无收藏"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:layout_centerInParent="true"
+            />
     </RelativeLayout>
 </LinearLayout>

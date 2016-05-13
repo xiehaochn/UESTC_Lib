@@ -64,23 +64,19 @@ public class BaseActivity extends AppCompatActivity {
     }
     protected void add(){
         baseActivities.add(this);
-        log("baseActivities add:"+this);
     }
 
     @Override
     public void finish() {
         if(baseActivities.contains(this)) {
             baseActivities.remove(this);
-            log("baseActivities remove:"+this);
         }
         super.finish();
     }
 
     protected void finishAll() {
         if(!baseActivities.isEmpty()){
-            log("baseActivities finishAll:");
             for (BaseActivity baseActivity:baseActivities){
-                log("baseActivities Remove:"+baseActivity);
                 baseActivity.finish();
             }
         }

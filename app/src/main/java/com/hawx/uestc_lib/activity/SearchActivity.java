@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.base.BaseActivity;
 
+import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -42,6 +43,7 @@ public class SearchActivity extends BaseActivity {
     private final String url="http://webpac.uestc.edu.cn/search~S1*chx/?searchtype=X&searcharg=";
     private final String url_detail="http://webpac.uestc.edu.cn";
     private final String RESULT_URL="RESULT_URL_KEY";
+    private final String RESULT_TITLE="RESULT_TITLE_KEY";
     private ArrayAdapter<String> arrayAdapter;
     private ArrayList<String> result_string=new ArrayList<String>();
     private ArrayList<String> result_link=new ArrayList<String>();
@@ -75,7 +77,7 @@ public class SearchActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String url_detail_final=url_detail+result_link.get(position);
-                startResultActivity(SearchActivity.this,url_detail_final);
+                startResultActivity(SearchActivity.this,url_detail_final,result_string.get(position));
             }
         });
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -135,9 +137,10 @@ public class SearchActivity extends BaseActivity {
         }
         arrayAdapter.notifyDataSetChanged();
     }
-    private void startResultActivity(Context context, String url){
+    private void startResultActivity(Context context, String url, String title){
         Intent intent=new Intent(context,SearchDetailActivity.class);
         intent.putExtra(RESULT_URL,url);
+        intent.putExtra(RESULT_TITLE,title);
         startActivity(intent);
     }
 }

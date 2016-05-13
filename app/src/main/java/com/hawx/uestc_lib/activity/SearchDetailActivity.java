@@ -1,8 +1,15 @@
 package com.hawx.uestc_lib.activity;
 
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -16,9 +23,13 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.base.BaseActivity;
+import com.hawx.uestc_lib.data.SearchDetailData;
 import com.hawx.uestc_lib.widget.TableLayout;
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -37,9 +48,15 @@ import butterknife.ButterKnife;
  */
 public class SearchDetailActivity extends BaseActivity {
     private final String RESULT_URL="RESULT_URL_KEY";
+    private final String RESULT_TITLE="RESULT_TITLE_KEY";
+    private final int START_FOR_RESULT_CODE=1;
     private Toolbar toolbar;
     private ArrayList<String> ItemsEntrys=new ArrayList<String>();
     private ArrayList<String> InfoEntrys=new ArrayList<String>();
+    private JSONArray collection=new JSONArray();
+    private boolean alreadyCollect=false;
+    private boolean isDataChange=false;
+    private SharedPreferences sharedPreferences;
     @BindView(R.id.activity_searchdetail_author)
     TextView author;
     @BindView(R.id.activity_searchdetail_bookname)
@@ -71,16 +88,50 @@ public class SearchDetailActivity extends BaseActivity {
     private String[] matcher=new String[10];
     private RequestQueue requestQueue;
     private int bookNum;
+    private Toolbar.OnMenuItemClickListener menuItemClickListener;
+    private SharedPreferences.Editor editor;
+    private String url_detail;
+    private String title;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setNeedLeftMenu(false);
         setContentView(R.layout.activity_searchdetail);
         ButterKnife.bind(this);
+        try {
+            checkCollection();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         initToolBar();
         intiMatcher();
-        getInfomation();
+        getInformation();
     }
+
+    private void checkCollection() throws JSONException {
+        url_detail=getIntent().getExtras().getString(RESULT_URL);
+        title=getIntent().getExtras().getString(RESULT_TITLE);
+        sharedPreferences=getSharedPreferences("collection",0);
+        editor=sharedPreferences.edit();
+        String data=sharedPreferences.getString("data","nodata");
+        if(data.equals("nodata")){
+            editor.putString("data",collection.toString());
+            editor.apply();
+        }else {
+            collection = new JSONArray(data);
+            for(int i=0;i<collection.length();i++){
+                JSONObject jsonObject= (JSONObject) collection.get(i);
+                String title_contain=jsonObject.getString("title");
+                if(title_contain.equals(title)){
+                    alreadyCollect=true;
+                    break;
+                }
+            }
+
+        }
+    }
+
     private void initToolBar() {
         toolbar= (Toolbar) findViewById(R.id.base_toolbar);
         toolbar.setTitle(R.string.app_name);
@@ -94,6 +145,56 @@ public class SearchDetailActivity extends BaseActivity {
                 finish();
             }
         });
+        menuItemClickListener=new Toolbar.OnMenuItemClickListener() {
+            @TargetApi(Build.VERSION_CODES.KITKAT)
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.menu_collection:{
+                        isDataChange=true;
+                        if(alreadyCollect){
+                            for(int i=0;i<collection.length();i++){
+                                JSONObject jsonObject= null;
+                                try {
+                                    jsonObject = (JSONObject) collection.get(i);
+                                    String title_contain=jsonObject.getString("title");
+                                    if(title_contain.equals(title)){
+                                        collection.remove(i);
+                                        alreadyCollect=false;
+                                        break;
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            item.setIcon(R.mipmap.icon_menu_collection);
+                            editor.putString("data",collection.toString());
+                            editor.apply();
+                            toast("取消收藏");
+                        }else{
+                            SearchDetailData searchDetailData=new SearchDetailData(title,url_detail);
+                            JSONObject jsonObject= null;
+                            try {
+                                jsonObject = searchDetailData.toJsonObject();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            collection.put(jsonObject);
+                            editor.putString("data",collection.toString());
+                            editor.apply();
+                            alreadyCollect=true;
+                            toast("收藏成功");
+                            item.setIcon(R.mipmap.icon_menu_collection_alreadycollect);
+                            }
+                        break;
+                    }
+                    default:
+                        break;
+                }
+                return true;
+            }
+        };
+        toolbar.setOnMenuItemClickListener(menuItemClickListener);
     }
     private void intiMatcher() {
         matcher[0]="主要责任者";
@@ -107,10 +208,9 @@ public class SearchDetailActivity extends BaseActivity {
         matcher[8]="其他责任人";
         matcher[9]="附加题名";
     }
-    private void getInfomation() {
+    private void getInformation() {
         requestQueue= Volley.newRequestQueue(this);
         requestQueue.start();
-        String url_detail=getIntent().getExtras().getString(RESULT_URL);
         requestQueue.add(new StringRequest(Request.Method.GET, url_detail, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -164,7 +264,7 @@ public class SearchDetailActivity extends BaseActivity {
         if (author_m.find( )) {
             author.setText(author_m.group(2));
         } else {
-            author.setText("没有相关信息");
+            author.setText("暂无相关信息");
         }
         String bookname_regular = "("+matcher[1]+")"+"(.*)"+"("+matcher[2]+")";
         Pattern bookname_pattern = Pattern.compile(bookname_regular);
@@ -172,7 +272,7 @@ public class SearchDetailActivity extends BaseActivity {
         if (bookname_m.find( )) {
             book_name.setText(bookname_m.group(2));
         } else {
-            book_name.setText("没有相关信息");
+            book_name.setText("暂无相关信息");
         }
         String publisher_regular = "("+matcher[2]+")"+"(.*)";
         Pattern publisher_pattern = Pattern.compile(publisher_regular);
@@ -180,7 +280,7 @@ public class SearchDetailActivity extends BaseActivity {
         if (publisher_m.find( )) {
             publisher.setText(publisher_m.group(2));
         } else {
-            publisher.setText("没有相关信息");
+            publisher.setText("暂无相关信息");
         }
         String carrier_regular = "("+matcher[3]+")"+"(.*)"+"("+matcher[4]+")";
         Pattern carrier_pattern = Pattern.compile(carrier_regular);
@@ -188,7 +288,7 @@ public class SearchDetailActivity extends BaseActivity {
         if (carrier_m.find( )) {
             carrier.setText(carrier_m.group(2));
         } else {
-            carrier.setText("没有相关信息");
+            carrier.setText("暂无相关信息");
         }
         String annotation_regular = "("+matcher[4]+")"+"(.*)"+"("+matcher[5]+")";
         Pattern annotation_pattern = Pattern.compile(annotation_regular);
@@ -196,7 +296,7 @@ public class SearchDetailActivity extends BaseActivity {
         if (annotation_m.find( )) {
             annotation.setText(annotation_m.group(2));
         } else {
-            annotation.setText("没有相关信息");
+            annotation.setText("暂无相关信息");
         }
         //============================================================================================================
         //   主题---------其他责任人-----附加题名---------标准号-----------索书号
@@ -358,27 +458,52 @@ public class SearchDetailActivity extends BaseActivity {
         if (callnum_m.find( )) {
             call_num.setText(callnum_m.group(2));
         } else {
-            call_num.setText("没有相关信息");
+            call_num.setText("暂无相关信息");
         }
     }
 
     private void checkIfEmpty() {
         if(book_theme.getText().toString().equals("")){
-            book_theme.setText("没有相关信息");
+            book_theme.setText("暂无相关信息");
         }
         if(otherone.getText().toString().equals("")){
-            otherone.setText("没有相关信息");
+            otherone.setText("暂无相关信息");
         }
         if(extra_name.getText().toString().equals("")){
-            extra_name.setText("没有相关信息");
+            extra_name.setText("暂无相关信息");
         }
         if(standard_num.getText().toString().equals("")){
-            standard_num.setText("没有相关信息");
+            standard_num.setText("暂无相关信息");
         }
     }
 
     private TableLayout generateTableView(int i) {
         TableLayout tl_r=new TableLayout(this,ItemsEntrys.get(i*5),ItemsEntrys.get(i*5+1),ItemsEntrys.get(i*5+2),ItemsEntrys.get(i*5+3),ItemsEntrys.get(i*5+4),requestQueue);
         return tl_r;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_searchdetailactivity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if(alreadyCollect)
+            menu.findItem(R.id.menu_collection).setIcon(R.mipmap.icon_menu_collection_alreadycollect);
+        return true;
+
+    }
+
+    @Override
+    public void finish() {
+        Intent intent=new Intent();
+        Bundle bundle=new Bundle();
+        bundle.putBoolean("isDataChanged",isDataChange);
+        intent.putExtras(bundle);
+        setResult(START_FOR_RESULT_CODE,intent);
+        super.finish();
     }
 }

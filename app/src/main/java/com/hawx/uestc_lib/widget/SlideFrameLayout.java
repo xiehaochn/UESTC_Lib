@@ -54,13 +54,13 @@ public class SlideFrameLayout extends FrameLayout {
         if(!doNotIntercept) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
-                    Log.d("SlideFrameLayout", "onInterceptTouchEvent : ACTION_DOWN");
+
                     startX = (int) ev.getX();
                     intercepted = false;
                     break;
                 }
                 case MotionEvent.ACTION_MOVE: {
-                    Log.d("SlideFrameLayout", "onInterceptTouchEvent : ACTION_MOVE");
+
                     currentX = (int) ev.getX();
                     if (startX - currentX > Utils.dpTopx(context, interceptDp)) {
                         intercepted = true;
