@@ -1,17 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
     <include layout="@layout/base_toolbar"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
+        android:layout_height="match_parent"
+        android:background="@drawable/base_background"
+        >
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="UserCenterActivity"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="尊敬的读者:\n您已登入[电子科技大学图书馆]"
+                    android:textColor="@android:color/white"
+                    />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="用户信息"
+                    android:textColor="@android:color/white"
+                    />
+                <android.support.v7.widget.GridLayout
+                    android:layout_marginLeft="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:rowCount="3"
+                    app:columnCount="2"
+                    android:padding="5dp"
+                    >
+                    <TextView
 
-            />
+                        android:text="姓名:"
+                        android:padding="5dp"
+                        android:textColor="@android:color/white"
+                        />
+                    <TextView
+
+                        android:id="@+id/activity_usercenter_name"
+                        android:padding="5dp"
+                        android:textColor="@android:color/white"
+                        />
+                    <TextView
+                        android:text="单位:"
+
+                        android:padding="5dp"
+                        android:textColor="@android:color/white"
+                        />
+                    <TextView
+                        android:id="@+id/activity_usercenter_school"
+                        android:padding="5dp"
+                        android:textColor="@android:color/white"
+                        />
+                    <TextView
+                        android:text="证件有效期:"
+                        android:padding="5dp"
+                        android:textColor="@android:color/white"
+                        />
+                    <TextView
+                        android:id="@+id/activity_usercenter_date"
+                        android:padding="5dp"
+                        android:textColor="@android:color/white"
+                        />
+                </android.support.v7.widget.GridLayout>
+                <ImageView
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@android:color/darker_gray"/>
+                <TextView
+                    android:padding="5dp"
+                    android:textSize="18sp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="借阅信息"
+                    android:textColor="@android:color/white"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/activity_usercenter_date_container"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </ScrollView>
 
     </RelativeLayout>
 </LinearLayout>
