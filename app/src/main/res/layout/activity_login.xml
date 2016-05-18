@@ -19,6 +19,7 @@
             android:paddingRight="2dp"
             />
         <android.support.v7.widget.GridLayout
+            android:id="@+id/activity_login_gridlayout"
             android:layout_centerHorizontal="true"
             android:layout_below="@id/activity_login_iamgeview"
             android:layout_width="wrap_content"
@@ -96,5 +97,17 @@
                 app:layout_column="2" />
 
         </android.support.v7.widget.GridLayout>
+        <com.hawx.uestc_lib.widget.WaitingDialog
+            android:id="@+id/activity_login_waitingdialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:isTextShow="true"
+            app:text="登录中..."
+            app:textColor="@android:color/white"
+            app:arcColor="@android:color/white"
+            app:speed="13"
+            android:layout_centerInParent="true"
+            android:visibility="invisible"
+            />
     </RelativeLayout>
 </LinearLayout>

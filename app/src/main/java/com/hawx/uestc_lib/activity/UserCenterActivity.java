@@ -2,9 +2,13 @@ package com.hawx.uestc_lib.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,12 +44,33 @@ public class UserCenterActivity extends BaseActivity {
     TextView date;
     @BindView(R.id.activity_usercenter_date_container)
     LinearLayout dataContainer;
+    @BindView(R.id.base_toolbar)
+    Toolbar toolbar;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTag("个人中心");
         setContentView(R.layout.activity_usercenter);
         ButterKnife.bind(this);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId()==R.id.menu_logout){
+                    sharedPreferences=getSharedPreferences("book",0);
+                    editor=sharedPreferences.edit();
+                    editor.clear();
+                    editor.apply();
+                    Intent intent = new Intent(UserCenterActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return true;
+                }else{
+                    return false;
+                }
+            }
+        });
         if(getIntent().getExtras()!=null) {
             String from=getIntent().getExtras().getString(FROM_ACTIVITY);
             if (from.equals("LoginActivity")) {
@@ -135,5 +160,10 @@ public class UserCenterActivity extends BaseActivity {
             tv3.setText(date);
         }
 
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_usercenteractivity,menu);
+        return true;
     }
 }
