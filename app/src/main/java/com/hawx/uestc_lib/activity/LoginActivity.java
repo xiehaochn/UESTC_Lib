@@ -252,7 +252,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                 List<String> cookiesHeader = headerFields.get(COOKIES_HEADER);
                                 if (cookiesHeader != null) {
                                     for (String cookie : cookiesHeader) {
-                                        log(cookie);
                                         msCookieManager.getCookieStore().add(null, HttpCookie.parse(cookie).get(0));
                                     }
                                 }

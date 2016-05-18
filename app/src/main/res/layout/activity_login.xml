@@ -70,6 +70,7 @@
                 app:layout_column="1"
                 android:textColor="@android:color/white"
                 android:text="记住密码"
+                android:buttonTint="@android:color/white"
                 />
             <CheckBox
                 app:layout_gravity="center"
@@ -77,6 +78,7 @@
                 app:layout_column="2"
                 android:textColor="@android:color/white"
                 android:text="自动登录"
+                android:buttonTint="@android:color/white"
                 />
             <Button
                 app:layout_gravity="center"

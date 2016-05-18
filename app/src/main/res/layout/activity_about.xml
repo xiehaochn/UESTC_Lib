@@ -5,13 +5,66 @@
     <include layout="@layout/base_toolbar"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <TextView
+        android:layout_height="match_parent"
+        android:background="@drawable/base_background">
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AboutActivity"
-
-            />
+            android:orientation="vertical"
+            android:padding="5dp"
+            >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/login_up_pic"
+                android:adjustViewBounds="true"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:gravity="center"
+                android:textSize="25sp"
+                android:text="@string/app_name"
+                android:textColor="@android:color/white"
+                />
+            <ImageView
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@android:color/darker_gray"
+                />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/about"
+                android:textSize="18sp"
+                android:textColor="@android:color/white"
+                />
+            <TextView
+                android:layout_marginTop="60dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                android:text="Contact Us"
+                android:gravity="left"
+                />
+            <TextView
+                android:layout_marginTop="5dp"
+                android:paddingLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="14sp"
+                android:text="E-mail:xiehaochn@gmail.com"
+                android:gravity="left"
+                />
+        </LinearLayout>
 
     </RelativeLayout>
 </LinearLayout>
