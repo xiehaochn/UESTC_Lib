@@ -95,6 +95,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         setTag("主页");
         setContentView(R.layout.activity_main);
+        setNeedSlideFinish(false);
         ButterKnife.bind(this);
         initToolBar();
         initViewPager();
@@ -178,7 +179,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void initData() {
-        toast("Start Init Data");
         requestQueue=Volley.newRequestQueue(this);
         requestQueue.start();
     }
@@ -273,17 +273,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
-                    case R.id.menu_setting:{
-                        toast("Setting");
-                        break;
-                    }
                     case R.id.menu_share:{
-                        toast("Share");
                         break;
                     }
                     case R.id.menu_exit:{
-                        toast("Exit");
-                        finishAll();
+                        finish();
                         break;
                     }
                     default:

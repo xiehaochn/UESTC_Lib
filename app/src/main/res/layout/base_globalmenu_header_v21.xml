@@ -23,6 +23,8 @@
         android:layout_width="@dimen/base_globalmenuheader_size"
         android:layout_height="@dimen/base_globalmenuheader_size" />
     <TextView
+        android:layout_marginLeft="20dp"
+        android:id="@+id/globalmenu_name"
         android:paddingLeft="10dp"
         android:layout_toRightOf="@id/globalmenu_avatar"
         android:textSize="20sp"
@@ -33,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <ImageButton
+        android:id="@+id/globalmenu_jiantou"
         android:layout_marginEnd="10dp"
         android:layout_centerVertical="true"
         android:padding="1dp"

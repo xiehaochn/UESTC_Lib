@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">科大藏经阁</string>
-    <string name="menu_setting">设置</string>
     <string name="menu_exit">退出</string>
     <string name="menu_share">分享</string>
     <string name="open">open</string>

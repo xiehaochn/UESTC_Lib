@@ -32,6 +32,7 @@ public class SlideFrameLayout extends FrameLayout {
     private Context context;
     private BaseActivity baseActivity;
     private AccelerateInterpolator accelerateInterpolator=new AccelerateInterpolator();
+    private boolean onOff=true;
     public SlideFrameLayout(Context context, BaseActivity baseActivity) {
         super(context);
         this.context=context;
@@ -51,6 +52,9 @@ public class SlideFrameLayout extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if(!onOff){
+            return super.onInterceptTouchEvent(ev);
+        }
         if(!doNotIntercept) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
@@ -83,6 +87,9 @@ public class SlideFrameLayout extends FrameLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(!onOff){
+            return super.onInterceptTouchEvent(event);
+        }
         if(event.getAction()==MotionEvent.ACTION_DOWN){
             intercepted=true;
         }
@@ -161,4 +168,7 @@ public class SlideFrameLayout extends FrameLayout {
         this.doNotIntercept =isDrawerOpened;
     }
 
+    public void setOnOff(boolean onOff) {
+        this.onOff = onOff;
+    }
 }

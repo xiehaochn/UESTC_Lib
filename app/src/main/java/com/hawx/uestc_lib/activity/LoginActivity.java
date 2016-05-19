@@ -269,6 +269,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                                         editor1.clear();
                                         editor1.putString("bookName",url_detail);
                                         editor1.putString("bookNum",TextUtils.join(";", msCookieManager.getCookieStore().getCookies()));
+                                        editor1.putBoolean("isRead",true);
                                         editor1.commit();
                                     }
                                     con.setConnectTimeout(8000);

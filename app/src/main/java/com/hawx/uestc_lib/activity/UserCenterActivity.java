@@ -54,12 +54,12 @@ public class UserCenterActivity extends BaseActivity {
         setTag("个人中心");
         setContentView(R.layout.activity_usercenter);
         ButterKnife.bind(this);
+        sharedPreferences=getSharedPreferences("book",0);
+        editor=sharedPreferences.edit();
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if(item.getItemId()==R.id.menu_logout){
-                    sharedPreferences=getSharedPreferences("book",0);
-                    editor=sharedPreferences.edit();
                     editor.clear();
                     editor.apply();
                     Intent intent = new Intent(UserCenterActivity.this, LoginActivity.class);
@@ -96,6 +96,10 @@ public class UserCenterActivity extends BaseActivity {
             Elements name=user_one.getElementsByTag("strong");
             for (Element name_one :name ) {
                 user_name=name_one.text();
+                if(sharedPreferences.getBoolean("isRead",false)){
+                    editor.putString("bookOwner",user_name);
+                    editor.apply();
+                }
             }
         }
         name.setText(user_name);

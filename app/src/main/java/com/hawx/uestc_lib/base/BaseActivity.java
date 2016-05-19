@@ -49,6 +49,8 @@ public class BaseActivity extends AppCompatActivity {
     private int version;
     private boolean needLeftMenu=true;
     private String tag;
+    private GlobalLeftMenu globalLeftMenu;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -143,7 +145,7 @@ public class BaseActivity extends AppCompatActivity {
     }
     /**注入抽屉导航*/
     private void setupDrawer() {
-        GlobalLeftMenu globalLeftMenu=new GlobalLeftMenu(this,tag);
+        globalLeftMenu=new GlobalLeftMenu(this,tag);
         toolbar= (Toolbar) slideFrameLayout.findViewById(R.id.base_toolbar);
         toolbar.setSubtitle(tag);
         toolbar.setSubtitleTextAppearance(this,R.style.SubTitleText);
@@ -203,5 +205,15 @@ public class BaseActivity extends AppCompatActivity {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    @Override
+    protected void onResume() {
+        if(globalLeftMenu!=null)
+        globalLeftMenu.changeData();
+        super.onResume();
+    }
+    protected void setNeedSlideFinish(boolean onOff){
+        slideFrameLayout.setOnOff(onOff);
     }
 }
