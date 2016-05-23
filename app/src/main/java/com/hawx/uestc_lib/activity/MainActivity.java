@@ -340,12 +340,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 break;
         }
     }
-    private void sendRequest(int catalog_ID, final String catalog){
+    private void sendRequest(final int catalog_ID, final String catalog){
         isLoading=true;
         waitingDialog.setVisibility(View.VISIBLE);
         final String requestBody="catalog_id="+catalog_ID+"&pn=&rn=15&dtype=&key="+APPKEY;
         String requestURL=URL+"?"+requestBody;
-        log(requestURL);
         JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestURL, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -360,6 +359,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 }
                 if(responseData.getResultcode().equals("200")) {
                     Intent intent = new Intent(MainActivity.this, BookListActivity.class);
+                    intent.putExtra("catalog_id",catalog_ID);
                     intent.putExtra("catalog", catalog);
                     intent.putExtra("data", responseData.getResult().toString());
                     startActivity(intent);

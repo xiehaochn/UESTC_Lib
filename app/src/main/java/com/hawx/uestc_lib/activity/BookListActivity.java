@@ -10,6 +10,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.adapter.BookListAdapter;
 import com.hawx.uestc_lib.base.BaseActivity;
@@ -36,6 +42,10 @@ public class BookListActivity extends BaseActivity {
     private ArrayList<BookDetailData> bookDetailDatas=new ArrayList<BookDetailData>();
     private BookListAdapter adapter;
     private LinearLayoutManager layoutManager;
+    private RequestQueue requestQueue;
+    private int catalog_id;
+    private static final String URL ="http://apis.juhe.cn/goodbook/query";
+    public static final String APPKEY ="2f0af81454a23554f12f800d259e5e60";
     @BindView(R.id.activity_booklist_recyclerview)
     RecyclerView recyclerView;
     @BindView(R.id.activity_booklist_pulluptorefresh)
@@ -57,9 +67,8 @@ public class BookListActivity extends BaseActivity {
 
     private void initData() throws JSONException {
         String responseData_string=getIntent().getExtras().getString("data");
-        log(responseData_string);
         JSONObject jsonObject=new JSONObject(responseData_string);
-        ResultData resultData=new ResultData();
+        ResultData resultData;
         resultData=ResultData.jsonToData(jsonObject);
         bookDetailDatas.clear();
         JSONArray jsonArray=resultData.getData();
@@ -86,14 +95,7 @@ public class BookListActivity extends BaseActivity {
         refreshCircle.setStartRefreshingListener(new PullUpToRefresh.startRefreshingListener() {
             @Override
             public void startRefreshing() {
-                toast("Start Refreshing");
-                refreshCircle.postDelayed(new Runnable() {
-                    @Override
-                      public void run() {
-                        refreshCircle.setRefreshing(false);
-                        toast("End Refreshing");
-                    }
-                },5000);
+                sendRefreshRequest();
             }
         });
     }
@@ -117,5 +119,53 @@ public class BookListActivity extends BaseActivity {
         bookDetailDatas.clear();
         super.onDestroy();
     }
-
+    public void sendRefreshRequest(){
+        requestQueue= Volley.newRequestQueue(this);
+        requestQueue.start();
+        catalog_id=getIntent().getExtras().getInt("catalog_id");
+        final int currentNum=adapter.getItemCount();
+        int refreshedNum=10;
+        final String requestBody="catalog_id="+catalog_id+"&pn="+currentNum+"&rn="+refreshedNum+"&dtype=&key="+APPKEY;
+        String requestURL=URL+"?"+requestBody;
+        JsonObjectRequest jsonObjectRequest=new JsonObjectRequest(Request.Method.GET, requestURL, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                ResponseData responseData=new ResponseData();
+                try {
+                    responseData=ResponseData.jsonToData(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(responseData.getResultcode().equals("200")) {
+                    try {
+                        String result = responseData.getResult().toString();
+                        JSONObject jsonObject = new JSONObject(result);
+                        ResultData resultData;
+                        resultData = ResultData.jsonToData(jsonObject);
+                        JSONArray jsonArray = resultData.getData();
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            BookDetailData bookDetailData = BookDetailData.jsonToData((JSONObject) jsonArray.get(i));
+                            bookDetailDatas.add(bookDetailData);
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    adapter.notifyDataSetChanged();
+                }else if(responseData.getResultcode().equals("202")){
+                    toast("没有更多内容");
+                    refreshCircle.setRefreshing(false);
+                } else{
+                    toast("网络连接错误");
+                }
+                refreshCircle.setRefreshing(false);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                toast("网络连接错误");
+                refreshCircle.setRefreshing(false);
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
 }

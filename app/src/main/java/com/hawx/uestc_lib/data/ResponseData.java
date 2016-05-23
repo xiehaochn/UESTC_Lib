@@ -15,7 +15,9 @@ public class ResponseData {
         ResponseData responseData=new ResponseData();
         responseData.resultcode=jsonObject.getString("resultcode");
         responseData.reason=jsonObject.getString("reason");
-        responseData.result=jsonObject.getJSONObject("result");
+        if(!jsonObject.isNull("result")) {
+            responseData.result = jsonObject.getJSONObject("result");
+        }
         responseData.error_code=jsonObject.getInt("error_code");
         return responseData;
     }
