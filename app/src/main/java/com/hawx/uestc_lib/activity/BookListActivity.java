@@ -23,6 +23,7 @@ import com.hawx.uestc_lib.data.BookDetailData;
 import com.hawx.uestc_lib.data.ResponseData;
 import com.hawx.uestc_lib.data.ResultData;
 import com.hawx.uestc_lib.widget.PullUpToRefresh;
+import com.hawx.uestc_lib.widget.PullUpToRefreshIMP;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,8 +49,8 @@ public class BookListActivity extends BaseActivity {
     public static final String APPKEY ="2f0af81454a23554f12f800d259e5e60";
     @BindView(R.id.activity_booklist_recyclerview)
     RecyclerView recyclerView;
-    @BindView(R.id.activity_booklist_pulluptorefresh)
-    PullUpToRefresh refreshCircle;
+    @BindView(R.id.activity_booklist_pulluptorefreshimp)
+    PullUpToRefreshIMP pullUpToRefreshIMP;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,12 +88,23 @@ public class BookListActivity extends BaseActivity {
                 super.onScrollStateChanged(recyclerView, newState);
                 if(newState== RecyclerView.SCROLL_STATE_IDLE){
                     if(layoutManager.findLastCompletelyVisibleItemPosition()==adapter.getItemCount()-1){
-                        refreshCircle.setVisibility(View.VISIBLE);
+                        pullUpToRefreshIMP.setShouldIntercept(true);
+                        //refreshCircle.setVisibility(View.VISIBLE);
+                    }else{
+                        pullUpToRefreshIMP.setShouldIntercept(false);
                     }
                 }
             }
         });
+        /*
         refreshCircle.setStartRefreshingListener(new PullUpToRefresh.startRefreshingListener() {
+            @Override
+            public void startRefreshing() {
+                sendRefreshRequest();
+            }
+        });
+        */
+        pullUpToRefreshIMP.setStartRefreshingListener(new PullUpToRefreshIMP.startRefreshingListener() {
             @Override
             public void startRefreshing() {
                 sendRefreshRequest();
@@ -151,19 +163,21 @@ public class BookListActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     adapter.notifyDataSetChanged();
+                    pullUpToRefreshIMP.setShouldIntercept(false);
                 }else if(responseData.getResultcode().equals("202")){
                     toast("没有更多内容");
-                    refreshCircle.setRefreshing(false);
                 } else{
                     toast("网络连接错误");
                 }
-                refreshCircle.setRefreshing(false);
+                //refreshCircle.setRefreshing(false);
+                pullUpToRefreshIMP.setRefreshing(false);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 toast("网络连接错误");
-                refreshCircle.setRefreshing(false);
+                //refreshCircle.setRefreshing(false);
+                pullUpToRefreshIMP.setRefreshing(false);
             }
         });
         requestQueue.add(jsonObjectRequest);
