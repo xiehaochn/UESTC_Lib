@@ -1,15 +1,20 @@
 package com.hawx.uestc_lib.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -17,8 +22,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
+import com.hawx.uestc_lib.activity.BookListActivity;
 import com.hawx.uestc_lib.data.BookDetailData;
 import com.hawx.uestc_lib.utils.Utils;
+import com.hawx.uestc_lib.widget.BookDetailDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,9 +41,11 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
     private Context context;
     private RequestQueue requestQueue;
     private HashMap<Integer,Bitmap> bitmapHashMap=new HashMap<Integer,Bitmap>();
-    public BookListAdapter(ArrayList<BookDetailData> bookDetailDatas, Context context) {
+    private Activity activity;
+    public BookListAdapter(ArrayList<BookDetailData> bookDetailDatas, Context context, Activity activity) {
         this.bookDetailDatas = bookDetailDatas;
         this.context=context;
+        this.activity=activity;
         requestQueue=Volley.newRequestQueue(context);
     }
 
@@ -52,7 +61,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
     }
 
     @Override
-    public void onBindViewHolder(BookDetailVH holder, int position) {
+    public void onBindViewHolder(BookDetailVH holder, final int position) {
         BookDetailData data=bookDetailDatas.get(position);
         holder.bookTitle.setText(data.getTitle());
         if(data.getTitle().length()>10) {
@@ -70,6 +79,33 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
             tag+=tags[i]+"  ";
         }
         holder.bookTags.setText(tag);
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final BookDetailDialog bookDetailDialog=new BookDetailDialog(context,R.style.SelectDialog,bookDetailDatas.get(position),bitmapHashMap.get(position));
+                bookDetailDialog.setCancelable(true);
+                Window dialogWindow=bookDetailDialog.getWindow();
+                WindowManager.LayoutParams params=dialogWindow.getAttributes();
+                dialogWindow.setGravity(Gravity.TOP);
+                int[] location=new int[2];
+                v.getLocationOnScreen(location);
+                params.y=location[1]-Utils.getStatusBarHeight(activity);
+                dialogWindow.setAttributes(params);
+                dialogWindow.setWindowAnimations(R.style.SelectDialogAnim);
+                bookDetailDialog.show();
+                bookDetailDialog.setListener(new BookDetailDialog.OnBuyTextClickListener() {
+                    @Override
+                    public void dangdangClicked() {
+                        Toast.makeText(context,"dangdangClicked",Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void jingdongClicked() {
+                        Toast.makeText(context,"jingdongClicked",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     private void addBookPic(final int position, String imageURL, final BookDetailVH holder) {

@@ -14,11 +14,12 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.FrameLayout;
 
 import com.hawx.uestc_lib.R;
-
 /**
- * Created by Administrator on 2016/5/24.
+ * PullUpToRefresh extends FrameLayout
+ * @author Hawx
+ * @version 1.0
  */
-public class PullUpToRefreshIMP extends FrameLayout {
+public class PullUpToRefreshFrameLayout extends FrameLayout {
     private Context context;
     private Paint ringPaint;
     private Paint backgroundPaint;
@@ -39,19 +40,19 @@ public class PullUpToRefreshIMP extends FrameLayout {
     private startRefreshingListener listener;
     private boolean flag=false;
 
-    public PullUpToRefreshIMP(Context context) {
+    public PullUpToRefreshFrameLayout(Context context) {
         super(context);
         this.context=context;
         init();
     }
 
-    public PullUpToRefreshIMP(Context context, AttributeSet attrs) {
+    public PullUpToRefreshFrameLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context=context;
         init();
     }
 
-    public PullUpToRefreshIMP(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PullUpToRefreshFrameLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.context=context;
         init();

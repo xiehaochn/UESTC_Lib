@@ -24,7 +24,7 @@ public class SlideFrameLayout extends FrameLayout {
     private static int DEFAULT_INTERCEPT_DP =8;
     private static int DEFAULT_FINISH_DP=140;
     private boolean doNotIntercept =false;
-    private int startX,currentX;
+    private int startX,currentX,startY,currentY;
     private int interceptDp= DEFAULT_INTERCEPT_DP;
     private int finishDp= DEFAULT_FINISH_DP;
     private boolean intercepted=false;
@@ -58,16 +58,19 @@ public class SlideFrameLayout extends FrameLayout {
         if(!doNotIntercept) {
             switch (ev.getAction()) {
                 case MotionEvent.ACTION_DOWN: {
-
+                    startY= (int) ev.getY();
                     startX = (int) ev.getX();
                     intercepted = false;
                     break;
                 }
                 case MotionEvent.ACTION_MOVE: {
-
+                    currentY= (int) ev.getY();
                     currentX = (int) ev.getX();
                     if (startX - currentX > Utils.dpTopx(context, interceptDp)) {
                         intercepted = true;
+                    }
+                    if(Math.abs(currentY-startY)>Utils.dpTopx(context,interceptDp)){
+                        intercepted=false;
                     }
                     break;
                 }

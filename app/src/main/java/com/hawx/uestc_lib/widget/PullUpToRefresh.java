@@ -26,7 +26,9 @@ import com.hawx.uestc_lib.R;
  * PullUpToRefresh
  * @author Hawx
  * @version 1.0
+ * @deprecated Use PullUpToRefreshFrameLayout instead
  */
+
 public class PullUpToRefresh extends View {
 
     private static final int defaultGap=300;
