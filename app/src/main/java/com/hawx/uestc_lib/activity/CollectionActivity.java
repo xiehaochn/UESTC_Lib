@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
 public class CollectionActivity extends BaseActivity {
     private final String RESULT_URL="RESULT_URL_KEY";
     private final String RESULT_TITLE="RESULT_TITLE_KEY";
-    private final int START_FOR_RESULT_CODE=1;
+    private final int START_FOR_RESULT_CODE=10010;
     private ArrayList<String> collection_title =new ArrayList<String>();
     private ArrayList<String> collection_url =new ArrayList<String>();
     private SharedPreferences sharedPreferences;
@@ -109,7 +109,7 @@ public class CollectionActivity extends BaseActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                startResultActivity(CollectionActivity.this,collection_url.get(position),collection_title.get(position));
+                startResultActivity(collection_url.get(position),collection_title.get(position));
             }
         });
     }
@@ -139,8 +139,8 @@ public class CollectionActivity extends BaseActivity {
             }
         }
     }
-    private void startResultActivity(Context context, String url, String title){
-        Intent intent=new Intent(context,SearchDetailActivity.class);
+    private void startResultActivity( String url, String title){
+        Intent intent=new Intent(this,SearchDetailActivity.class);
         intent.putExtra(RESULT_URL,url);
         intent.putExtra(RESULT_TITLE,title);
         startActivityForResult(intent,START_FOR_RESULT_CODE);
@@ -148,7 +148,7 @@ public class CollectionActivity extends BaseActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode==1){
+        if(requestCode==START_FOR_RESULT_CODE){
             Bundle bundle=data.getExtras();
             boolean changed=bundle.getBoolean("isDataChanged");
             if(changed){

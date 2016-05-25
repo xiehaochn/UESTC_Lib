@@ -49,7 +49,7 @@ import butterknife.ButterKnife;
 public class SearchDetailActivity extends BaseActivity {
     private final String RESULT_URL="RESULT_URL_KEY";
     private final String RESULT_TITLE="RESULT_TITLE_KEY";
-    private final int START_FOR_RESULT_CODE=1;
+    private final int START_FOR_RESULT_CODE=10010;
     private Toolbar toolbar;
     private ArrayList<String> ItemsEntrys=new ArrayList<String>();
     private ArrayList<String> InfoEntrys=new ArrayList<String>();

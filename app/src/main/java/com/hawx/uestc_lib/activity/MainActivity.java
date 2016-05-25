@@ -274,6 +274,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.menu_share:{
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, "我在使用科大藏经阁进行馆藏查询，再也不怕找不到图书位置了~");
+                        sendIntent.setType("text/plain");
+                        startActivity(Intent.createChooser(sendIntent,"分享至："));
                         break;
                     }
                     case R.id.menu_exit:{
