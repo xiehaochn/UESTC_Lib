@@ -170,8 +170,4 @@ public class CollectionActivity extends BaseActivity {
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
 }

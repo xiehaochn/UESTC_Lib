@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.utils.Utils;
@@ -72,7 +73,35 @@ public class PictureSlideFragment extends Fragment {
             default:
                 break;
         }
-
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switch (mIndex){
+                    case 0:{
+                        Toast.makeText(getContext(),"Clicked:3",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case 1:{
+                        Toast.makeText(getContext(),"Clicked:1",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case 2:{
+                        Toast.makeText(getContext(),"Clicked:2",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case 3:{
+                        Toast.makeText(getContext(),"Clicked:3",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case 4:{
+                        Toast.makeText(getContext(),"Clicked:1",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    default:
+                        break;
+                }
+            }
+        });
         return view;
     }
 }

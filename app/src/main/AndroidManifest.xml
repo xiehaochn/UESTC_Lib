@@ -61,7 +61,6 @@
         </activity>
         <activity android:name=".activity.SearchDetailActivity"
             android:theme="@style/AppTheme.Translucent"
-            android:launchMode="singleTask"
             >
 
         </activity>

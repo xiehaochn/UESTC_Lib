@@ -6,5 +6,6 @@
     <string name="close">close</string>
     <string name="dangdangwang"><u>当当网</u></string>
     <string name="jingdong"><u>京东商城</u></string>
+    <string name="more"><u>更多</u></string>
     <string name="about">\t\t\t\t科大藏经阁是一款针对电子科技大学图书馆的馆藏图书查询系统，通过网络将用户感兴趣的书籍简介、作者信息、书籍具体位置呈现在手机界面上，方便用户的借阅查询。校内用户还可以通过科大信息门户系统帐号登录，查询借阅记录、借阅期限等信息。</string>
 </resources>

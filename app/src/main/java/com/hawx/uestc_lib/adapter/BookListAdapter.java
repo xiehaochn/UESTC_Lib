@@ -24,6 +24,7 @@ import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.activity.BookListActivity;
 import com.hawx.uestc_lib.data.BookDetailData;
+import com.hawx.uestc_lib.data.RecommendTestData;
 import com.hawx.uestc_lib.utils.Utils;
 import com.hawx.uestc_lib.widget.BookDetailDialog;
 
@@ -85,12 +86,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
                 final BookDetailDialog bookDetailDialog=new BookDetailDialog(context,R.style.SelectDialog,bookDetailDatas.get(position),bitmapHashMap.get(position));
                 bookDetailDialog.setCancelable(true);
                 Window dialogWindow=bookDetailDialog.getWindow();
-                WindowManager.LayoutParams params=dialogWindow.getAttributes();
-                dialogWindow.setGravity(Gravity.TOP);
-                int[] location=new int[2];
-                v.getLocationOnScreen(location);
-                params.y=location[1]-Utils.getStatusBarHeight(activity);
-                dialogWindow.setAttributes(params);
+                dialogWindow.setGravity(Gravity.CENTER_VERTICAL);
                 dialogWindow.setWindowAnimations(R.style.SelectDialogAnim);
                 bookDetailDialog.show();
                 bookDetailDialog.setListener(new BookDetailDialog.OnBuyTextClickListener() {

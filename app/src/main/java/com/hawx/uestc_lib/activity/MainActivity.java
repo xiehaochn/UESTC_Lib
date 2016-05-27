@@ -18,6 +18,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayout;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
@@ -40,6 +43,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.adapter.PictureSlideViewPagerAdapter;
+import com.hawx.uestc_lib.adapter.RecommendAdapter;
 import com.hawx.uestc_lib.base.BaseActivity;
 import com.hawx.uestc_lib.data.ResponseData;
 import com.hawx.uestc_lib.utils.Utils;
@@ -72,6 +76,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private boolean isLoading=false;
     private static final String URL ="http://apis.juhe.cn/goodbook/query";
     public static final String APPKEY ="2f0af81454a23554f12f800d259e5e60";
+    private RecommendAdapter adapter;
     @BindView(R.id.activity_main_textbutton_more)
     TextView text_button_more;
     @BindView(R.id.activity_main_gridlayout)
@@ -90,6 +95,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     Button button_257;
     @BindView(R.id.activity_main_waitingdialog)
     WaitingDialog waitingDialog;
+    @BindView(R.id.activity_main_recyclerview)
+    RecyclerView recyclerView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +135,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 });
             }
         });
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        adapter=new RecommendAdapter(this);
+        recyclerView.setAdapter(adapter);
+        RecyclerView.LayoutManager layoutManager=new GridLayoutManager(this,3);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @TargetApi(Build.VERSION_CODES.M)

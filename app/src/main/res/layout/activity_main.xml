@@ -40,6 +40,7 @@
             android:layout_marginTop="1dp"
             >
             <TextView
+                android:layout_marginLeft="5dp"
                 android:layout_alignParentStart="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,7 +61,7 @@
                 android:textColor="@android:color/white"
                 android:gravity="center"
                 android:layout_centerVertical="true"
-                android:text="更多"
+                android:text="@string/more"
                 android:layout_marginEnd="5dp"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="5dp" />
@@ -134,8 +135,40 @@
             android:layout_below="@id/activity_main_gridlayout"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@android:color/white"
+
             />
+    <RelativeLayout
+        android:id="@+id/activity_main_relativelayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/base_text_background"
+        android:layout_below="@id/activity_main_splitline"
+        android:layout_marginTop="1dp"
+        >
+        <TextView
+            android:id="@+id/activity_main_textview"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textColor="@android:color/white"
+            android:text="今日推荐"
+            android:layout_marginLeft="5dp"
+            android:padding="1dp"
+            android:gravity="center"
+            android:layout_alignParentLeft="true" />
+        <android.support.v7.widget.RecyclerView
+            android:layout_below="@id/activity_main_textview"
+            android:layout_marginTop="2dp"
+            android:id="@+id/activity_main_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimaryDark"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
         <com.hawx.uestc_lib.widget.WaitingDialog
             android:id="@+id/activity_main_waitingdialog"
             android:layout_width="wrap_content"
