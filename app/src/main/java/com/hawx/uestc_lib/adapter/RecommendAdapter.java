@@ -1,6 +1,7 @@
 package com.hawx.uestc_lib.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.ContentFrameLayout;
@@ -17,8 +18,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hawx.uestc_lib.R;
+import com.hawx.uestc_lib.activity.WebViewActivity;
 import com.hawx.uestc_lib.data.RecommendTestData;
 import com.hawx.uestc_lib.widget.BookDetailDialog;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,12 +64,54 @@ public class RecommendAdapter extends RecyclerView.Adapter<RecommendAdapter.Reco
                 bookDetailDialog.setListener(new BookDetailDialog.OnBuyTextClickListener() {
                     @Override
                     public void dangdangClicked() {
-                        Toast.makeText(context,"dangdangClicked",Toast.LENGTH_SHORT).show();
+                        String location[]=RecommendTestData.bookDetailDatas.get(position).getOnline().split(" ");
+                        String regular = "(当当网:)"+"(.*)";
+                        Pattern pattern = Pattern.compile(regular);
+                        boolean find=false;
+                        String url="";
+                        for(String loc:location){
+                            Matcher matcher = pattern.matcher(loc);
+                            if (matcher.find()) {
+                                url=matcher.group(2);
+                                find=true;
+                                break;
+                            }
+                        }
+                        if(!find){
+                            Toast.makeText(context, "链接无效", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Intent intent=new Intent(context, WebViewActivity.class);
+                            intent.putExtra("URL",url);
+                            intent.putExtra("TITLE","当当网-"+RecommendTestData.bookDetailDatas.get(position).getTitle());
+                            context.startActivity(intent);
+                            bookDetailDialog.dismiss();
+                        }
                     }
 
                     @Override
                     public void jingdongClicked() {
-                        Toast.makeText(context,"jingdongClicked",Toast.LENGTH_SHORT).show();
+                        String location[]=RecommendTestData.bookDetailDatas.get(position).getOnline().split(" ");
+                        String regular = "(京东商城:)"+"(.*)";
+                        Pattern pattern = Pattern.compile(regular);
+                        boolean find=false;
+                        String url="";
+                        for(String loc:location){
+                            Matcher matcher = pattern.matcher(loc);
+                            if (matcher.find()) {
+                                url=matcher.group(2);
+                                find=true;
+                                break;
+                            }
+                        }
+                        if(!find){
+                            Toast.makeText(context, "链接无效", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Intent intent=new Intent(context, WebViewActivity.class);
+                            intent.putExtra("URL",url);
+                            intent.putExtra("TITLE","京东-"+RecommendTestData.bookDetailDatas.get(position).getTitle());
+                            context.startActivity(intent);
+                            bookDetailDialog.dismiss();
+                        }
                     }
                 });
             }

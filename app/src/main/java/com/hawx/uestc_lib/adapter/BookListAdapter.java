@@ -2,10 +2,12 @@ package com.hawx.uestc_lib.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.hawx.uestc_lib.R;
 import com.hawx.uestc_lib.activity.BookListActivity;
+import com.hawx.uestc_lib.activity.WebViewActivity;
 import com.hawx.uestc_lib.data.BookDetailData;
 import com.hawx.uestc_lib.data.RecommendTestData;
 import com.hawx.uestc_lib.utils.Utils;
@@ -30,6 +33,8 @@ import com.hawx.uestc_lib.widget.BookDetailDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +68,7 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
 
     @Override
     public void onBindViewHolder(BookDetailVH holder, final int position) {
-        BookDetailData data=bookDetailDatas.get(position);
+        final BookDetailData data=bookDetailDatas.get(position);
         holder.bookTitle.setText(data.getTitle());
         if(data.getTitle().length()>10) {
             holder.bookTitle.setTextSize(18);
@@ -92,12 +97,54 @@ public class BookListAdapter extends RecyclerView.Adapter<BookListAdapter.BookDe
                 bookDetailDialog.setListener(new BookDetailDialog.OnBuyTextClickListener() {
                     @Override
                     public void dangdangClicked() {
-                        Toast.makeText(context,"dangdangClicked",Toast.LENGTH_SHORT).show();
+                        String location[]=data.getOnline().split(" ");
+                        String regular = "(当当网:)"+"(.*)";
+                        Pattern pattern = Pattern.compile(regular);
+                        boolean find=false;
+                        String url="";
+                        for(String loc:location){
+                            Matcher matcher = pattern.matcher(loc);
+                            if (matcher.find()) {
+                                url=matcher.group(2);
+                                find=true;
+                                break;
+                            }
+                        }
+                        if(!find){
+                            Toast.makeText(context, "链接无效", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Intent intent=new Intent(context, WebViewActivity.class);
+                            intent.putExtra("URL",url);
+                            intent.putExtra("TITLE","当当网-"+data.getTitle());
+                            context.startActivity(intent);
+                            bookDetailDialog.dismiss();
+                        }
                     }
 
                     @Override
                     public void jingdongClicked() {
-                        Toast.makeText(context,"jingdongClicked",Toast.LENGTH_SHORT).show();
+                        String location[]=data.getOnline().split(" ");
+                        String regular = "(京东商城:)"+"(.*)";
+                        Pattern pattern = Pattern.compile(regular);
+                        boolean find=false;
+                        String url="";
+                        for(String loc:location){
+                            Matcher matcher = pattern.matcher(loc);
+                            if (matcher.find()) {
+                                url=matcher.group(2);
+                                find=true;
+                                break;
+                            }
+                        }
+                        if(!find){
+                            Toast.makeText(context, "链接无效", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Intent intent=new Intent(context, WebViewActivity.class);
+                            intent.putExtra("URL",url);
+                            intent.putExtra("TITLE","京东-"+data.getTitle());
+                            context.startActivity(intent);
+                            bookDetailDialog.dismiss();
+                        }
                     }
                 });
             }

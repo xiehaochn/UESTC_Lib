@@ -78,23 +78,23 @@ public class PictureSlideFragment extends Fragment {
             public void onClick(View v) {
                 switch (mIndex){
                     case 0:{
-                        Toast.makeText(getContext(),"Clicked:3",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(),"Clicked:3",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case 1:{
-                        Toast.makeText(getContext(),"Clicked:1",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(),"Clicked:1",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case 2:{
-                        Toast.makeText(getContext(),"Clicked:2",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(),"Clicked:2",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case 3:{
-                        Toast.makeText(getContext(),"Clicked:3",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(),"Clicked:3",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case 4:{
-                        Toast.makeText(getContext(),"Clicked:1",Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getContext(),"Clicked:1",Toast.LENGTH_SHORT).show();
                         break;
                     }
                     default:
